@@ -8,7 +8,10 @@ rm(list = ls())
 source("scripts/helpers/marchesi_helpers_functions.R")
 
 
-marchesi <- read_marchesi_custom("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/marchesi/marchesi.TXT")
+# SET PARAMS --------------------------------------------------------------
+local_folder <- "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/marchesi/"
+local_files <- list.files(local_folder, full.names = T, pattern = "TXT$")
+marchesi <- read_marchesi_custom(local_files)
 remote_file <- "sales/ecommerce/marchesi_2018.csv"
 
 # UPLOAD TO DATA LAKE -----------------------------------------------------
