@@ -10,7 +10,7 @@ source("helpers/sap_helpers_functions.R")
 
 # SET PARAMS --------------------------------------------------------------
 local_folder <- "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/retail/"
-local_files <- list.files(local_folder, full.names = T)
+local_files <- list.files(local_folder, full.names = T, pattern = "csv$")
 remote_file <- paste0("sales/retail/",list.files(local_folder))
 
 
@@ -28,11 +28,6 @@ sales_dataset <- unpivot_markdowns(data = sales_dataset,
                                val_loc_reg_col = "val_loc_reg", 
                                val_loc_md_col = "val_loc_saldi")
 
-
-
-# SAVE INTO LOCAL REPO -----------------------------------------------------
-# sales_dataset %>%
-#         write.csv2(paste0("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/analytics/datasets/",remote_file), na = "", row.names = F, dec = ",")
 
 
 # # UPLOAD TO DATA LAKE -----------------------------------------------------

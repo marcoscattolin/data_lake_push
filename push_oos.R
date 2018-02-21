@@ -16,7 +16,7 @@ source("helpers/ga_helpers_functions.R")
 
 # GET OUT OF STOCK DATA -------------------------------------------------------------
 # get last 14 days of out of stock details
-oos <- map_df(c("P","M"),~ ga_get_out_of_stock(ref_day = Sys.Date()-1, brand = .x, paginate_query = T, lookback_days = 3))
+oos <- map_df(c("P","M"),~ ga_get_out_of_stock(ref_day = Sys.Date()-1, brand = .x, paginate_query = T, lookback_days = 14))
 
 
 

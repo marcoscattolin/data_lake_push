@@ -9,7 +9,7 @@ source("helpers/sap_helpers_functions.R")
 
 
 # SET PARAMS --------------------------------------------------------------
-local_files <- list.files("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/ecommerce/", full.names = T)
+local_files <- list.files("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/ecommerce/", full.names = T, pattern = "csv$")
 remote_file <- paste0("sales/ecommerce/",list.files("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/ecommerce/"))
 
 
