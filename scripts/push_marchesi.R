@@ -5,7 +5,7 @@ library(stringr)                #version 1.2.0
 
 
 rm(list = ls())        
-source("helpers/marchesi_helpers_functions.R")
+source("scripts/helpers/marchesi_helpers_functions.R")
 
 
 marchesi <- read_marchesi_custom("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/marchesi/marchesi.TXT")

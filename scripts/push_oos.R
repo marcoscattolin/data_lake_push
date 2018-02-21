@@ -6,8 +6,8 @@ rm(list = ls())
 
 
 
-source("helpers/ga_oos_helpers_functions.R")
-source("helpers/ga_helpers_functions.R")
+source("scripts/helpers/ga_oos_helpers_functions.R")
+source("scripts/helpers/ga_helpers_functions.R")
 
 
 

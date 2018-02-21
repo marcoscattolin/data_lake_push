@@ -6,7 +6,7 @@ rm(list = ls())
 
 
 
-source("helpers/ga_helpers_functions.R")
+source("scripts/helpers/ga_helpers_functions.R")
 
 
 
