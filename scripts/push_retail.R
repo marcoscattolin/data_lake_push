@@ -52,3 +52,13 @@ r <- httr::PUT(put_url,
 r$status_code
 file.remove(tempfile)
 
+
+
+
+
+
+
+
+# END OF SCRIPT -----------------------------------------------------------
+cat("Script completed, hit Return to finish...")
+a <- readLines(file("stdin"),1)
