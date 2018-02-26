@@ -25,18 +25,3 @@ ga_get_out_of_stock <- function(ref_day, brand, paginate_query = F, use_miumiu_m
         
 }
 
-out_of_stock_enrich <- function(oos_data,ecom_data){
-        
-        temp <- ecom_data %>% 
-                mutate(key = str_sub(article_style_code,1,3)) %>% 
-                mutate(category_id = paste0(brand,commercial_class,collection)) %>% 
-                select(category_id,key) %>% 
-                group_by(key) %>% 
-                summarise(category_id = first(category_id))
-        
-        oos_data <- oos_data %>% 
-                mutate(key = str_sub(eventLabel,1,3)) %>% 
-                left_join(temp, by = "key") %>% 
-                select(-key)
-        
-}

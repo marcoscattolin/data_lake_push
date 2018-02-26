@@ -157,7 +157,6 @@ ga_get_grouped_traffic <- function(brand, start_date, end_date, segment_id, spli
         
 }
 
-
 ga_get_views <- function(brand, ref_day, split_daywise = F,use_carshoe_raw = F){
         
         #subset to e-store countries
@@ -189,4 +188,75 @@ ga_get_views <- function(brand, ref_day, split_daywise = F,use_carshoe_raw = F){
         
 }
 
+ga_get_most_viewed <- function(ref_day, brand, paginate_query = F, use_miumiu_mirror = F, lookback_days = 6){
+        
+        
+        most_viewed <- ga_get_data(start_date = ref_day-lookback_days,
+                    end_date = ref_day,
+                    brand = brand,
+                    dimensions = "ga:pagePathLevel3,ga:eventLabel",
+                    metrics = "ga:totalEvents",
+                    filters = "ga:eventCategory==ecommerce,ga:eventAction==detail",
+                    split_daywise = F,
+                    paginate_query = paginate_query,
+                    use_miumiu_mirror = use_miumiu_mirror) %>% 
+                filter(pagePathLevel3 != "/miumiuca/") %>% 
+                mutate(brand = brand)
+        
+        most_viewed %>% 
+                mutate(country_code = str_sub(pagePathLevel3,-3) %>% str_sub(.,1,2) %>% toupper()) %>% 
+                filter(grepl("^[A-Z0-9]{4,}",eventLabel)) %>% 
+                mutate(sku = eventLabel) %>% 
+                group_by(sku,country_code,brand) %>% 
+                summarise(views = sum(totalEvents)) %>% 
+                ungroup()
+        
+        
+        
+        
+        
+}
 
+ga_get_most_viewed_china <- function(ref_day, brand, paginate_query = F, use_miumiu_mirror = F, lookback_days = 6){
+        
+        
+        
+        most_viewed_china <- ga_get_data(start_date = ref_day-lookback_days,
+                                         end_date = ref_day,
+                                         brand = brand,
+                                         dimensions = "ga:pagePathLevel4",
+                                         metrics = "ga:pageviews",
+                                         filters = "ga:pagePath=~^www\\.prada\\.com/cn/*;ga:pagePathLevel4=~product",
+                                         split_daywise = F,
+                                         paginate_query = paginate_query,
+                                         use_miumiu_mirror = use_miumiu_mirror)
+        
+        most_viewed_china <- most_viewed_china %>% 
+                mutate(sku = str_extract(pagePathLevel4,"[A-Z0-9_]*\\.html$") %>% gsub("\\.html$","",.)) %>% 
+                group_by(sku) %>% 
+                summarise(views = sum(pageviews)) %>% 
+                mutate(country_code = "CN", brand = brand) %>% 
+                filter(sku != "") %>% 
+                ungroup()
+        
+        
+        
+}
+
+sku_enrich <- function(ga_data,ecom_data, sku_col){
+        
+        temp <- ecom_data %>% 
+                mutate(key = str_sub(article_style_code,1,3)) %>% 
+                mutate(category_id = paste0(brand,commercial_class,collection)) %>% 
+                select(category_id,key) %>% 
+                group_by(key) %>% 
+                summarise(category_id = first(category_id))
+        
+        
+        ga_data <- ga_data %>% 
+                mutate_("key" = sku_col) %>% 
+                mutate(key = str_sub(key,1,3)) %>% 
+                left_join(temp, by = "key") %>% 
+                select(-key)
+        
+}

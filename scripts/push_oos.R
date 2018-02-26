@@ -40,7 +40,7 @@ ecommerce <- map_df(files,data_lake_fetch)
 
 
 #enrich oos data
-oos <- out_of_stock_enrich(oos,ecommerce)
+oos <- sku_enrich(oos,ecommerce, "eventLabel")
 
 
 
