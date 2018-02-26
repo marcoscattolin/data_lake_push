@@ -22,7 +22,7 @@ source("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/token/
 # write file to temporary dir
 tempfile <- "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv"
 marchesi %>%
-        write.csv2(file = tempfile, na = "", row.names = F, dec = ",")
+        write.csv2(file = tempfile, na = "", row.names = F)
 upload_file <- upload_file(tempfile)
 
 

@@ -2,14 +2,13 @@ library(tidyverse)
 library(lubridate)
 library(RGoogleAnalytics)
 library(stringr)
-rm(list = ls())       
+ 
 
 
-
+# SOURCE HELPERS FILES ----------------------------------------------------
 source("scripts/helpers/ga_oos_helpers_functions.R")
 source("scripts/helpers/ga_helpers_functions.R")
-
-
+source("scripts/helpers/dl_helpers_functions.R")
 
 
 
@@ -21,61 +20,34 @@ oos <- map_df(c("P","M"),~ ga_get_out_of_stock(ref_day = Sys.Date()-1, brand = .
 
 
 # ENRICH WITH CATEGORIES --------------------------------------------------
-# get from data lake ecommerce data
-
-#source token
 source("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/token/azure_token.r")
 
-#list files
+#list ecommerce files
 path <- "sales/ecommerce"
-r <- httr::GET(paste0("https://pradadigitaldatalake.azuredatalakestore.net/webhdfs/v1/",path,"?op=LISTSTATUS"),add_headers(Authorization = paste0("Bearer ",res$access_token)))
-files <- toJSON(jsonlite::fromJSON(content(r,"text")), pretty = TRUE) %>% fromJSON(simplifyDataFrame = T)
+files <- data_lake_list(path)
 
-files <- files$FileStatuses$FileStatus %>% 
-        tbl_df() %>% 
+#restrict to last 2 ecommerce files
+files <- files %>% 
+        filter(grepl("ecom",pathSuffix)) %>% 
         arrange(desc(pathSuffix)) %>% 
         head(2) %>% 
-        pull(pathSuffix)
-
-# download and build data frame
-ecommerce <- map_df(files, function(x){
-        r <- httr::GET(paste0("https://pradadigitaldatalake.azuredatalakestore.net/webhdfs/v1/",path,"/",x,"?op=OPEN&read=true"),
-                       add_headers(Authorization = paste0("Bearer ",res$access_token)))
-        writeBin(content(r), paste0("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/",x)) 
-        ecommerce <- read_csv2(paste0("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/",x), col_types = cols(.default = col_character()))
-        file.remove(paste0("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/",x))
-        ecommerce
-})
+        pull(pathSuffix) %>% 
+        paste0(path,"/",.)
 
 
+# get ecommerce data from data lake 
+ecommerce <- map_df(files,data_lake_fetch)
 
+
+#enrich oos data
 oos <- out_of_stock_enrich(oos,ecommerce)
 
 
 
 # UPLOAD TO DATA LAKE -----------------------------------------------------
-# write file to temporary dir
-tempfile <- "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv"
-oos %>%
-        write.csv2(file = tempfile, na = "", row.names = F, dec = ",")
-upload_file <- upload_file(tempfile)
-
 # assign remote file name
 remote_file <- paste0("googleanalytics/outofstock/outofstock.csv")
-
-
-#upload
-put_url <- paste0("https://pradadigitaldatalake.azuredatalakestore.net/webhdfs/v1/",remote_file,"?op=CREATE&overwrite=true&write=true")
-r <- httr::PUT(put_url,
-               body = upload_file,
-               add_headers(Authorization = paste0("Bearer ",res$access_token),
-                           "Transfer-Encoding" = "chunked"), progress())
-r$status_code
-file.remove(tempfile)
-
-
-
-
+data_lake_push(oos,remote_file)
 
 
 
