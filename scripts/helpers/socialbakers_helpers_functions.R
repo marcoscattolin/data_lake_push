@@ -211,6 +211,7 @@ col_check <- function(file){
                 }else{
                         delta = as.character(length(NewHeader_FB)-length(PreviousHeader_FB))
                         message("FB - There are ",delta," new columns" )
+                        rm(delta)
                 }
                 
                 #check removed column
@@ -221,6 +222,7 @@ col_check <- function(file){
                         n = as.character(length(Removed))
                         message("FB - There are ",n," removed columns: ", Removed)
                         RemovedFBcolumn <<- Removed
+                        rm(n)
                 }
                 
                 #check added column
@@ -231,8 +233,9 @@ col_check <- function(file){
                         n = as.character(length(Added))
                         message("FB - There are ",n," new columns: ", Added)
                         NewFBcolumn <<- Added
+                        rm(n)
                 }
-                rm(delta,n,Removed,Added,NewHeader_FB,PreviousHeader_FB)
+                rm(Removed,Added,NewHeader_FB,PreviousHeader_FB)
         } else if(str_detect(file, paste0(local_folder,"IG"))){
                 
                 #read previuos headers
@@ -247,6 +250,7 @@ col_check <- function(file){
                 }else{
                         delta = as.character(length(NewHeader_IG)-length(PreviousHeader_IG))
                         message("IG - There are ",delta," new columns" )
+                        rm(delta)
                 }
                 
                 #check removed column
@@ -257,6 +261,7 @@ col_check <- function(file){
                         n = as.character(length(Removed))
                         message("IG - There are ",n," removed columns: ", Removed)
                         RemovedIGcolumn <<- Removed
+                        rm(n)
                 }
                 
                 #check added column
@@ -267,8 +272,9 @@ col_check <- function(file){
                         n = as.character(length(Added))
                         message("IG - There are ",n," new columns: ", Added)
                         NewIGcolumn <<- Added
+                        rm(n)
                 }
-                rm(delta,n,Removed,Added,PreviousHeader_IG,NewHeader_IG)
+                rm(Removed,Added,PreviousHeader_IG,NewHeader_IG)
         }else if(str_detect(file, paste0(local_folder,"TW"))){
                 
                 #read previuos headers
@@ -283,6 +289,7 @@ col_check <- function(file){
                 }else{
                         delta = as.character(length(NewHeader_TW)-length(PreviousHeader_TW))
                         message("TW - There are ",delta," new columns" )
+                        rm(delta)
                 }
                 
                 #check removed column
@@ -293,6 +300,7 @@ col_check <- function(file){
                         n = as.character(length(Removed))
                         message("TW - There are ",n," removed columns: ", Removed)
                         RemovedTWcolumn <<- Removed
+                        rm(n)
                 }
                 
                 #check added column
@@ -303,8 +311,9 @@ col_check <- function(file){
                         n = as.character(length(Added))
                         message("TW - There are ",n," new columns: ", Added)
                         NewTWcolumn <<- Added
+                        rm(n)
                 }
-                rm(delta,n,Removed,Added,NewHeader_TW,PreviousHeader_TW)
+                rm(Removed,Added,NewHeader_TW,PreviousHeader_TW)
         }else if(str_detect(file, paste0(local_folder,"YT"))){
                 
                 #read previuos headers
@@ -319,6 +328,7 @@ col_check <- function(file){
                 }else{
                         delta = as.character(length(NewHeader_YT)-length(PreviousHeader_YT))
                         message("YT - There are ",delta," new columns" )
+                        rm(delta)
                 }
                 
                 #check removed column
@@ -329,6 +339,7 @@ col_check <- function(file){
                         n = as.character(length(Removed))
                         message("YT - There are ",n," removed columns: ", Removed)
                         RemovedYTcolumn <<- Removed
+                        rm(n)
                 }
                 
                 #check added column
@@ -339,8 +350,9 @@ col_check <- function(file){
                         n = as.character(length(Added))
                         message("YT - There are ",n," new columns: ", Added)
                         NewYTcolumn <<- Added
+                        rm(n)
                 }
-                rm(delta,n,Removed,Added,NewHeader_YT,PreviousHeader_YT)
+                rm(Removed,Added,NewHeader_YT,PreviousHeader_YT)
         }
 }
 
