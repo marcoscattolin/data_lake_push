@@ -16,11 +16,12 @@ local_files <- list.files(local_folder, full.names = T, pattern = "xlsx$")
 # CHECK COLUMNS --------------------------------------------------------------
 lapply(local_files,col_check)
 
+stop_function()
 
 # READ POSTS -------------------------------------------------------------------
 Posts <- lapply(local_files,read_posts_social) %>% 
         bind_rows()
-remote_file <- "social/Posts/Posts_2017_02.csv"
+remote_file <- "social/Posts/Posts_2017_04.csv"
 
 
 # UPLOAD TO DATA LAKE -----------------------------------------------------

@@ -314,7 +314,7 @@ col_check <- function(file){
                         rm(n)
                 }
                 rm(Removed,Added,NewHeader_TW,PreviousHeader_TW)
-        }else if(str_detect(file, paste0(local_folder,"YT"))){
+        } else {
                 
                 #read previuos headers
                 load(file = paste0(local_folder,"check headers/Previous header YT.rda"))
@@ -355,4 +355,22 @@ col_check <- function(file){
                 rm(Removed,Added,NewHeader_YT,PreviousHeader_YT)
         }
 }
+
+stop_function <- function(){
+        if(exists("NewFBcolumn") | 
+           exists("NewIGcolumn") | 
+           exists("NewTWcolumn") |
+           exists("NewYTcolumn") |
+           exists("RemovedFBcolumn") |
+           exists("RemovedIGcolumn") |
+           exists("RemovedTWcolumn") |
+           exists("RemovedYTcolumn")){
+                input <- menu(c("Yes", "No"), title = "Have you updated column names?")
+                if(input == 2){
+                        stop("Columns must be updated!")
+                }
+        }
+}
+
+
 
