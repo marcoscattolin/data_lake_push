@@ -203,7 +203,7 @@ col_check <- function(file){
                 load(file = paste0(local_folder,"check headers/Previous header FB.rda"))
                 
                 #read new headers
-                NewHeader_FB <- colnames(read_excel(path = local_files[1], sheet = 2,skip = 1,col_names = T))
+                NewHeader_FB <- colnames(read_excel(path = file, sheet = 2,skip = 1,col_names = T))
                 
                 #check column number
                 if(length(NewHeader_FB) == length(PreviousHeader_FB)){
@@ -220,7 +220,7 @@ col_check <- function(file){
                 } else {
                         n = as.character(length(Removed))
                         message("FB - There are ",n," removed columns: ", Removed)
-                        RemovedFBcolumn <- Removed
+                        RemovedFBcolumn <<- Removed
                 }
                 
                 #check added column
@@ -230,16 +230,16 @@ col_check <- function(file){
                 } else {
                         n = as.character(length(Added))
                         message("FB - There are ",n," new columns: ", Added)
-                        NewFBcolumn <- Added
+                        NewFBcolumn <<- Added
                 }
-                rm(delta,n,Removed,Added)
+                rm(delta,n,Removed,Added,NewHeader_FB,PreviousHeader_FB)
         } else if(str_detect(file, paste0(local_folder,"IG"))){
                 
                 #read previuos headers
                 load(file = paste0(local_folder,"check headers/Previous header IG.rda"))
                 
                 #read new headers
-                NewHeader_IG <- colnames(read_excel(path = local_files[1], sheet = 2,skip = 1,col_names = T))
+                NewHeader_IG <- colnames(read_excel(path = file, sheet = 2,skip = 1,col_names = T))
                 
                 #check column number
                 if(length(NewHeader_IG) == length(PreviousHeader_IG)){
@@ -256,7 +256,7 @@ col_check <- function(file){
                 } else {
                         n = as.character(length(Removed))
                         message("IG - There are ",n," removed columns: ", Removed)
-                        RemovedIGcolumn <- Removed
+                        RemovedIGcolumn <<- Removed
                 }
                 
                 #check added column
@@ -266,52 +266,52 @@ col_check <- function(file){
                 } else {
                         n = as.character(length(Added))
                         message("IG - There are ",n," new columns: ", Added)
-                        NewIGcolumn <- Added
+                        NewIGcolumn <<- Added
                 }
-                rm(delta,n,Removed,Added)
+                rm(delta,n,Removed,Added,PreviousHeader_IG,NewHeader_IG)
         }else if(str_detect(file, paste0(local_folder,"TW"))){
                 
                 #read previuos headers
-                load(file = paste0(local_folder,"check headers/Previous header FB.rda"))
+                load(file = paste0(local_folder,"check headers/Previous header TW.rda"))
                 
                 #read new headers
-                NewHeader_FB <- colnames(read_excel(path = local_files[1], sheet = 2,skip = 1,col_names = T))
+                NewHeader_TW <- colnames(read_excel(path = file, sheet = 2,skip = 1,col_names = T))
                 
                 #check column number
-                if(length(NewHeader_FB) == length(PreviousHeader_FB)){
-                        message("FB - Number of columns: OK")
+                if(length(NewHeader_TW) == length(PreviousHeader_TW)){
+                        message("TW - Number of columns: OK")
                 }else{
-                        delta = as.character(length(NewHeader_FB)-length(PreviousHeader_FB))
-                        message("FB - There are ",delta," new columns" )
+                        delta = as.character(length(NewHeader_TW)-length(PreviousHeader_TW))
+                        message("TW - There are ",delta," new columns" )
                 }
                 
                 #check removed column
-                Removed <- PreviousHeader_FB[!PreviousHeader_FB %in% NewHeader_FB]
+                Removed <- PreviousHeader_TW[!PreviousHeader_TW %in% NewHeader_TW]
                 if(length(Removed)==0){
-                        message("FB - No removed column")
+                        message("TW - No removed column")
                 } else {
                         n = as.character(length(Removed))
-                        message("FB - There are ",n," removed columns: ", Removed)
-                        RemovedFBcolumn <- Removed
+                        message("TW - There are ",n," removed columns: ", Removed)
+                        RemovedTWcolumn <<- Removed
                 }
                 
                 #check added column
-                Added <- NewHeader_FB[!NewHeader_FB %in% PreviousHeader_FB]
+                Added <- NewHeader_TW[!NewHeader_TW %in% PreviousHeader_TW]
                 if(length(Added)==0){
-                        message("FB - No added column")
+                        message("TW - No added column")
                 } else {
                         n = as.character(length(Added))
-                        message("FB - There are ",n," new columns: ", Added)
-                        NewFBcolumn <- Added
+                        message("TW - There are ",n," new columns: ", Added)
+                        NewTWcolumn <<- Added
                 }
-                rm(delta,n,Removed,Added)
+                rm(delta,n,Removed,Added,NewHeader_TW,PreviousHeader_TW)
         }else if(str_detect(file, paste0(local_folder,"YT"))){
                 
                 #read previuos headers
                 load(file = paste0(local_folder,"check headers/Previous header YT.rda"))
                 
                 #read new headers
-                NewHeader_YT <- colnames(read_excel(path = local_files[1], sheet = 2,skip = 1,col_names = T))
+                NewHeader_YT <- colnames(read_excel(path = file, sheet = 2,skip = 1,col_names = T))
                 
                 #check column number
                 if(length(NewHeader_YT) == length(PreviousHeader_YT)){
@@ -328,7 +328,7 @@ col_check <- function(file){
                 } else {
                         n = as.character(length(Removed))
                         message("YT - There are ",n," removed columns: ", Removed)
-                        RemovedYTcolumn <- Removed
+                        RemovedYTcolumn <<- Removed
                 }
                 
                 #check added column
@@ -338,9 +338,9 @@ col_check <- function(file){
                 } else {
                         n = as.character(length(Added))
                         message("YT - There are ",n," new columns: ", Added)
-                        NewYTcolumn <- Added
+                        NewYTcolumn <<- Added
                 }
-                rm(delta,n,Removed,Added)
+                rm(delta,n,Removed,Added,NewHeader_YT,PreviousHeader_YT)
         }
 }
 
