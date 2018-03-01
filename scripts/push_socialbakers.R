@@ -7,9 +7,17 @@ library(stringr)                #version 1.2.0
 rm(list = ls())
 source("scripts/helpers/socialbakers_helpers_functions.R")
 
+
+
 # SET PARAMS --------------------------------------------------------------
 local_folder <- "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/socialbakers/"
 local_files <- list.files(local_folder, full.names = T, pattern = "xlsx$")
+
+# CHECK COLUMNS --------------------------------------------------------------
+lapply(local_files,col_check)
+
+
+# READ POSTS -------------------------------------------------------------------
 Posts <- lapply(local_files,read_posts_social) %>% 
         bind_rows()
 remote_file <- "social/Posts/Posts_2017_02.csv"
