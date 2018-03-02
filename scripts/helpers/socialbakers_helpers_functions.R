@@ -75,7 +75,7 @@ read_posts_social <- function(file){
                                View_on_Social = `View on Twitter`,
                                Content_Type = `Content Type`,
                                Created_Timezone = `Created Timezone`,
-                               Reaction__Like = Likes,
+                               Reactions__Like = Likes,
                                Comment_Count = Replies,
                                Share_Count = Retweets,
                                Number_of_Interactions_per_1000_Fans = `Number of Interactions per 1000 Followers`,
@@ -112,9 +112,9 @@ read_posts_social <- function(file){
                                View_on_Social = `View on YouTube`,
                                Created_Timezone = `Created Timezone`,
                                temp = Recorded,
-                               Number_of_Interactions_per_1000_Subscribers = `Number of Interactions per 1000 Subscribers`,
-                               Reaction__Like = `Like Count`,
-                               Reaction__Dislike = `Dislike Count`,
+                               Number_of_Interactions_per_1000_Fans = `Number of Interactions per 1000 Subscribers`,
+                               Reactions__Like = `Like Count`,
+                               Reactions__Dislike = `Dislike Count`,
                                Comment_Count = `Comment Count`,
                                Video_Duration = Duration,
                                Views = `View Count`,
@@ -127,6 +127,8 @@ read_posts_social <- function(file){
                 
         }
 }
+
+
 
 col_check <- function(file){
         if(str_detect(file, paste0(local_folder,"FB"))){
