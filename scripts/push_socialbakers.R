@@ -15,7 +15,7 @@ source("scripts/helpers/socialbakers_helpers_functions.R")
 
 
 # SET PARAMS --------------------------------------------------------------
-local_folder <- "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/socialbakers/Posts"
+local_folder <- "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/socialbakers/Posts/"
 local_files <- list.files(local_folder, full.names = T, pattern = "xlsx$")
 
 # CHECK COLUMNS --------------------------------------------------------------
@@ -63,9 +63,12 @@ file.remove(tempfile)
 rm(list = ls())
 source("scripts/helpers/socialbakers_helpers_functions.R")
 
+# SET PARAMS --------------------------------------------------------------
+local_folder <- "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/socialbakers/Fans/"
+local_files <- list.files(local_folder, full.names = T, pattern = "xlsx$")
 
 # READ FANS -------------------------------------------------------------------
-Posts <- lapply(local_files,read_fans_social) %>% 
+Fans <- lapply(local_files,read_fans_social) %>% 
         bind_rows()
 remote_file <- "social/Fans/Fans_2017_12.csv"
 
@@ -77,7 +80,7 @@ source("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/token/
 
 # write file to temporary dir
 tempfile <- "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv"
-Posts %>%
+Fans %>%
         write.csv2(file = tempfile, na = "", row.names = F, dec = ",")
 upload_file <- upload_file(tempfile)
 

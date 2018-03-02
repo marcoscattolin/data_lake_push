@@ -338,6 +338,7 @@ read_fans_social <- function(file){
         } else {
                 #read data
                 Fans <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
+                
                 Fans <- Fans %>%
                         rename(Fans = Subscribers,
                                Page = Channel) %>% 
