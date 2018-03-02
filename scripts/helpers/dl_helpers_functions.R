@@ -8,7 +8,7 @@ data_lake_push <- function(dataset, remote_file, tempfile = "k:/dept/DIGITAL E-C
         }
         
         dataset %>%
-                write.csv(file = tempfile, na = "", quote = T, row.names = F, fileEncoding = "UTF-8")
+                write.csv2(file = tempfile, na = "", quote = T, row.names = F, fileEncoding = "UTF-8")
         
         upload_file <- upload_file(tempfile)
         
