@@ -1,5 +1,7 @@
 data_lake_push <- function(dataset, remote_file, tempfile = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv", remove_temp = T, clean_line_breaks = T){
         
+        options(scipen=999)
+        
         if(clean_line_breaks){
                 dataset <- dataset %>%
                         mutate_if(is.character, ~ gsub(pattern = "\n|\r\n",replacement = " ",x = .))
@@ -8,7 +10,7 @@ data_lake_push <- function(dataset, remote_file, tempfile = "k:/dept/DIGITAL E-C
         
         # write temporary file to temporary dir
         dataset %>%
-                write_csv(path = tempfile, na = "")
+                write.csv(file = tempfile, na = "", quote = T, row.names = F, fileEncoding = "UTF-8")
         upload_file <- upload_file(tempfile)
         
         
