@@ -21,8 +21,7 @@ stop_function()
 # READ POSTS -------------------------------------------------------------------
 Posts <- lapply(local_files,read_posts_social) %>% 
         bind_rows()
-remote_file <- "social/Posts/Posts_2017_04.csv"
-
+remote_file <- "social/Posts/Posts_2018_01.csv"
 
 # UPLOAD TO DATA LAKE -----------------------------------------------------
 #source token

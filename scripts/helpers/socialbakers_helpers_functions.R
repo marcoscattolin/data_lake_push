@@ -10,15 +10,21 @@ read_posts_social <- function(file){
                 
                 #process data
                 cols <- PreviousHeader_FB
+                cols <- str_replace_all(cols," [%]", "")
                 cols <- str_replace_all(cols," ","_")
                 cols <- str_trim(cols,side = "both")
                 cols <- str_replace_all(cols,"Facebook", "Social")
                 cols <- str_replace_all(cols,"-","")
-                cols
+                cols <- str_replace_all(cols,"\\.","")
                 colnames(Posts) <- cols
                 Posts <- Posts %>% 
                         mutate(Social_Network = "FB") %>% 
-                        select(-starts_with("temp"))
+                        select(-starts_with("temp")) 
+                
+                #rename modified column
+                Posts <- Posts %>% 
+                        rename(Video_View_Time_sec = `Total_View_Time_(sec)`)
+          
                 
                 Posts <- Posts %>%
                         mutate(Page_Name = case_when(str_detect(tolower(Page_Name),"balenciaga") ~ "Balenciaga",
@@ -368,7 +374,7 @@ stop_function <- function(){
            exists("RemovedTWcolumn") |
            exists("RemovedYTcolumn")){
                 input <- menu(c("Yes", "No"), title = "Have you updated column names?")
-                if(input == 2){
+                if(input != 1){
                         stop("Columns must be updated!")
                 }
         }
