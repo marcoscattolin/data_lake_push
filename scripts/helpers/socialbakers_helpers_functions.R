@@ -1,81 +1,6 @@
 
 read_posts_social <- function(file){
         if(str_detect(file, paste0(local_folder,"FB"))){
-                #colnames
-                cols <- list("Date",
-                          "Page_Name",
-                          "URL",
-                          "Page_Id",
-                          "Type",
-                          "Post_Id",
-                          "Title",
-                          "Description",
-                          "Picture_Url",
-                          "Icon_Url",
-                          "Caption",
-                          "Author_Url",
-                          "Author_Id",
-                          "Author_Name",
-                          "Labels",
-                          "Content",
-                          "Content_Type",
-                          "Content_Link",
-                          "View_on_Social",
-                          "Created_Timezone",
-                          "Interaction_Count",
-                          "Number_of_Interactions_per_1000_Fans",
-                          "Grade",
-                          "Reaction_Count",
-                          "Comment_Count",
-                          "Share_Count",
-                          "Deleted",
-                          "Hidden",
-                          "Spam",
-                          "Published",
-                          "Promoted_Post_Detection",
-                          "Reactions-Like",
-                          "Reactions-Love",
-                          "Reactions-Haha",
-                          "Reactions-Wow",
-                          "Reactions-Sad",
-                          "Reactions-Angry",
-                          "Reach",
-                          "Reach_Paid",
-                          "Reach_Organic",
-                          "Impressions",
-                          "Impressions_Paid",
-                          "Impressions_Organic",
-                          "Reach_Engagement_Rate",
-                          "Engaged_Users",
-                          "Negative_Feedback",
-                          "Lifetime_Post_Stories",
-                          "Total_Likes",
-                          "Total_Comments",
-                          "Total_Shares",
-                          "Post_Consumers",
-                          "Post_Clicks",
-                          "Photo_Views",
-                          "Link_Clicks",
-                          "Other_Clicks",
-                          "Video_Play",
-                          "Insights_Reactions-Like",
-                          "Insights_Reactions-Love",
-                          "Insights_Reactions-Haha",
-                          "Insights_Reactions-Wow",
-                          "Insights_Reactions-Sad",
-                          "Insights_Reactions-Angry",
-                          "Total_Insights_Reactions",
-                          "Views",
-                          "Views-Auto-played",
-                          "Views-Click to Play",
-                          "Views-Organic",
-                          "Views-Paid",
-                          "30-second_Views",
-                          "30-second_Views-Auto-played",
-                          "30-second_Views-Click-to-Play",
-                          "30-second Views-Organic",
-                          "30-second Views-Paid",
-                          "Avg_Completion")
                 #read data
                 Posts <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
                 
@@ -84,32 +9,18 @@ read_posts_social <- function(file){
                 save(PreviousHeader_FB, file = paste0(local_folder,"check headers/Previous header FB.rda"))
                 
                 #process data
+                cols <- PreviousHeader_FB
+                cols <- str_replace_all(cols," ","_")
+                cols <- str_trim(cols,side = "both")
+                cols <- str_replace_all(cols,"Facebook", "Social")
+                cols <- str_replace_all(cols,"-","")
+                cols
                 colnames(Posts) <- cols
                 Posts <- Posts %>% 
                         mutate(Social_Network = "FB") %>% 
                         select(-starts_with("temp"))
                 
         } else if(str_detect(file, paste0(local_folder,"IG"))){
-                #colnames
-                cols <- c("Date",
-                          "Page_Name",
-                          "URL",
-                          "Page_Id",
-                          "Content",
-                          "View_on_Social",
-                          "Created_Timezone",
-                          "Content_Type",
-                          "Reactions-Like",
-                          "Comment_Count",
-                          "Number_of_Interactions_per_1000_Fans",
-                          "Labels",
-                          "Interaction_Count",
-                          "Post_Id",
-                          "Picture_Url",
-                          "Icon_Url",
-                          "temp",
-                          "Grade",
-                          "Promoted_Post_Detection")
                 
                 #read data
                 Posts <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
@@ -117,31 +28,35 @@ read_posts_social <- function(file){
                 #read colnames
                 PreviousHeader_IG <- colnames(Posts)
                 save(PreviousHeader_IG, file = paste0(local_folder,"check headers/Previous header IG.rda"))
+                
                 #process data
-                colnames(Posts) <- cols
+                Posts <- Posts %>%
+                        rename(Date = Date,
+                               Page_Name = `Profile Name`,
+                               URL = URL,
+                               Page_Id = `Profile Id`,
+                               Content = Content,
+                               View_on_Social = `View on Instagram`,
+                               Created_Timezone = `Created Timezone`,
+                               Content_Type = `Content Type`,
+                               Reactions__Like  = `Total Likes`,
+                               Comment_Count = `Total Comments`,
+                               Number_of_Interactions_per_1000_Fans = `Number of Interactions per 1000 Followers`,
+                               Labels = Labels,
+                               Interaction_Count = `Interaction Count`,
+                               Post_Id = Id,
+                               Picture_Url = `Picture Url`,
+                               Icon_Url = `Low Quality Picture Url`,
+                               temp = `Thumbnail Url`,
+                               Grade = Grade,
+                               Promoted_Post_Detection = `Promoted Post Detection`)
+                
                 Posts <- Posts %>% 
                         mutate(Social_Network = "IG") %>% 
                         select(-starts_with("temp"))
                 
                 
         } else if(str_detect(file, paste0(local_folder,"TW"))){
-                #colnames
-                cols <- c("Date",
-                          "Page_Name",
-                          "URL",
-                          "Page_Id",
-                          "Content",
-                          "View_on_Social",
-                          "Content_Type",
-                          "Created_Timezone",
-                          "Reactions-Like",
-                          "Comment_Count",
-                          "Share_Count",
-                          "Number_of_Interactions_per_1000_Fans",
-                          "Labels",
-                          "Interaction_Count",
-                          "Post_Id",
-                          "Picture_Url")
                 
                 #read data
                 Posts <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
@@ -151,44 +66,61 @@ read_posts_social <- function(file){
                 save(PreviousHeader_TW, file = paste0(local_folder,"check headers/Previous header TW.rda"))
                 
                 #process data
-                colnames(Posts) <- cols
+                Posts <- Posts %>%
+                        rename(Date = Date,
+                               Page_Name = `Page Name`,
+                               URL = URL,
+                               Page_Id = `Profile Id`,
+                               Content = Content,
+                               View_on_Social = `View on Twitter`,
+                               Content_Type = `Content Type`,
+                               Created_Timezone = `Created Timezone`,
+                               Reaction__Like = Likes,
+                               Comment_Count = Replies,
+                               Share_Count = Retweets,
+                               Number_of_Interactions_per_1000_Fans = `Number of Interactions per 1000 Followers`,
+                               Labels = Labels,
+                               Interaction_Count = `Interaction Count`,
+                               Post_Id = Id,
+                               Picture_Url = `Picture Url`)
+                
                 Posts <- Posts %>% 
                         mutate(Social_Network = "TW") %>% 
                         select(-starts_with("temp"))
                 
         } else {
-                #colnames
-                cols <- c("Date",
-                          "Page_Name",
-                          "URL",
-                          "Page_Id",
-                          "Post_Id",
-                          "Title",
-                          "Picture_Url",
-                          "Labels",
-                          "Content",
-                          "Content_Type",
-                          "View_on_Social",
-                          "Created_Timezone",
-                          "temp",
-                          "Number_of_Interactions_per_1000_Fans",
-                          "Reactions-Like",
-                          "Reaction-Dislike",
-                          "Comment_Count",
-                          "Video_Duration",
-                          "Views",
-                          "Video_View_Time_sec",
-                          "temp2")
                 
                 #read data
-                Posts <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
+                Posts <- read_excel(path = local_files[4], sheet = 2,skip = 1,col_names = T)
                 
                 #read colnames
                 PreviousHeader_YT <- colnames(Posts)
                 save(PreviousHeader_YT, file = paste0(local_folder,"check headers/Previous header YT.rda"))
-                
+                PreviousHeader_YT
                 #process data
-                colnames(Posts) <- cols
+                Posts <- Posts %>%
+                        rename(Date = Date,
+                               Page_Name = `Channel Name`,
+                               URL = URL,
+                               Page_Id = `Channel Id`,
+                               Post_Id = `Video Id`,
+                               Title = Title,
+                               Picture_Url = `Picture Url`,
+                               Labels = Labels,
+                               Content = Content,
+                               Content_Type = `Content Type`,
+                               View_on_Social = `View on YouTube`,
+                               Created_Timezone = `Created Timezone`,
+                               temp = Recorded,
+                               Number_of_Interactions_per_1000_Subscribers = `Number of Interactions per 1000 Subscribers`,
+                               Reaction__Like = `Like Count`,
+                               Reaction__Dislike = `Dislike Count`,
+                               Comment_Count = `Comment Count`,
+                               Video_Duration = Duration,
+                               Views = `View Count`,
+                               Video_View_Time_sec = `Video View Time (sec)`,
+                               temp2 = `Video View Time`)
+                
                 Posts <- Posts %>% 
                         mutate(Social_Network = "YT") %>% 
                         select(-starts_with("temp"))
