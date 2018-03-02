@@ -10,7 +10,7 @@ read_posts_social <- function(file){
                 
                 #process data
                 cols <- PreviousHeader_FB
-                cols <- str_replace_all(cols," [%]", "")
+                cols <- str_replace_all(cols," \\[\\%\\]", "")
                 cols <- str_replace_all(cols," ","_")
                 cols <- str_trim(cols,side = "both")
                 cols <- str_replace_all(cols,"Facebook", "Social")
