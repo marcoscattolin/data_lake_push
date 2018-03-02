@@ -20,6 +20,23 @@ read_posts_social <- function(file){
                         mutate(Social_Network = "FB") %>% 
                         select(-starts_with("temp"))
                 
+                Posts <- Posts %>%
+                        mutate(Page_Name = case_when(str_detect(tolower(Page_Name),"balenciaga") ~ "Balenciaga",
+                                                     str_detect(tolower(Page_Name),"burberry") ~ "Burberry",
+                                                     str_detect(tolower(Page_Name),"chanel") ~ "Chanel",
+                                                     str_detect(tolower(Page_Name),"dior") ~ "Dior",
+                                                     str_detect(tolower(Page_Name),"dolce & gabbana") ~ "Dolce & Gabbana",
+                                                     str_detect(tolower(Page_Name),"fendi") ~ "Fendi",
+                                                     str_detect(tolower(Page_Name),"armani") ~ "Giorgio Armani",
+                                                     str_detect(tolower(Page_Name),"gucci") ~ "Gucci",
+                                                     str_detect(tolower(Page_Name),"hermès") ~ "Hermes",
+                                                     str_detect(tolower(Page_Name),"louis vuitton") ~ "Louis Vuitton",
+                                                     str_detect(tolower(Page_Name),"miu miu") ~ "Miu Miu",
+                                                     str_detect(tolower(Page_Name),"prada") ~ "Prada",
+                                                     str_detect(tolower(Page_Name),"saint laurent") ~ "Saint Laurent",
+                                                     str_detect(tolower(Page_Name),"valentino") ~ "Valentino",
+                                                     str_detect(tolower(Page_Name),"versace") ~ "Versace"))
+                
         } else if(str_detect(file, paste0(local_folder,"IG"))){
                 
                 #read data
@@ -55,6 +72,23 @@ read_posts_social <- function(file){
                         mutate(Social_Network = "IG") %>% 
                         select(-starts_with("temp"))
                 
+                Posts <- Posts %>%
+                        mutate(Page_Name = case_when(str_detect(tolower(Page_Name),"balenciaga") ~ "Balenciaga",
+                                                     str_detect(tolower(Page_Name),"burberry") ~ "Burberry",
+                                                     str_detect(tolower(Page_Name),"chanel") ~ "Chanel",
+                                                     str_detect(tolower(Page_Name),"dior") ~ "Dior",
+                                                     str_detect(tolower(Page_Name),"dolce & gabbana") ~ "Dolce & Gabbana",
+                                                     str_detect(tolower(Page_Name),"fendi") ~ "Fendi",
+                                                     str_detect(tolower(Page_Name),"armani") ~ "Giorgio Armani",
+                                                     str_detect(tolower(Page_Name),"gucci") ~ "Gucci",
+                                                     str_detect(tolower(Page_Name),"hermès") ~ "Hermes",
+                                                     str_detect(tolower(Page_Name),"louis vuitton") ~ "Louis Vuitton",
+                                                     str_detect(tolower(Page_Name),"miu miu") ~ "Miu Miu",
+                                                     str_detect(tolower(Page_Name),"prada") ~ "Prada",
+                                                     str_detect(tolower(Page_Name),"saint laurent") ~ "Saint Laurent",
+                                                     str_detect(tolower(Page_Name),"valentino") ~ "Valentino",
+                                                     str_detect(tolower(Page_Name),"versace") ~ "Versace"))
+                
                 
         } else if(str_detect(file, paste0(local_folder,"TW"))){
                 
@@ -87,6 +121,23 @@ read_posts_social <- function(file){
                 Posts <- Posts %>% 
                         mutate(Social_Network = "TW") %>% 
                         select(-starts_with("temp"))
+                
+                Posts <- Posts %>%
+                        mutate(Page_Name = case_when(str_detect(tolower(Page_Name),"balenciaga") ~ "Balenciaga",
+                                                     str_detect(tolower(Page_Name),"burberry") ~ "Burberry",
+                                                     str_detect(tolower(Page_Name),"chanel") ~ "Chanel",
+                                                     str_detect(tolower(Page_Name),"dior") ~ "Dior",
+                                                     str_detect(tolower(Page_Name),"dolce & gabbana") ~ "Dolce & Gabbana",
+                                                     str_detect(tolower(Page_Name),"fendi") ~ "Fendi",
+                                                     str_detect(tolower(Page_Name),"armani") ~ "Giorgio Armani",
+                                                     str_detect(tolower(Page_Name),"gucci") ~ "Gucci",
+                                                     str_detect(tolower(Page_Name),"hermès") ~ "Hermes",
+                                                     str_detect(tolower(Page_Name),"louis vuitton") ~ "Louis Vuitton",
+                                                     str_detect(tolower(Page_Name),"miu miu") ~ "Miu Miu",
+                                                     str_detect(tolower(Page_Name),"prada") ~ "Prada",
+                                                     str_detect(tolower(Page_Name),"saint laurent") ~ "Saint Laurent",
+                                                     str_detect(tolower(Page_Name),"valentino") ~ "Valentino",
+                                                     str_detect(tolower(Page_Name),"versace") ~ "Versace"))
                 
         } else {
                 
@@ -124,6 +175,23 @@ read_posts_social <- function(file){
                 Posts <- Posts %>% 
                         mutate(Social_Network = "YT") %>% 
                         select(-starts_with("temp"))
+                
+                Posts <- Posts %>%
+                        mutate(Page_Name = case_when(str_detect(tolower(Page_Name),"balenciaga") ~ "Balenciaga",
+                                                     str_detect(tolower(Page_Name),"burberry") ~ "Burberry",
+                                                     str_detect(tolower(Page_Name),"chanel") ~ "Chanel",
+                                                     str_detect(tolower(Page_Name),"dior") ~ "Dior",
+                                                     str_detect(tolower(Page_Name),"dolce & gabbana") ~ "Dolce & Gabbana",
+                                                     str_detect(tolower(Page_Name),"fendi") ~ "Fendi",
+                                                     str_detect(tolower(Page_Name),"armani") ~ "Giorgio Armani",
+                                                     str_detect(tolower(Page_Name),"gucci") ~ "Gucci",
+                                                     str_detect(tolower(Page_Name),"hermès") ~ "Hermes",
+                                                     str_detect(tolower(Page_Name),"louis vuitton") ~ "Louis Vuitton",
+                                                     str_detect(tolower(Page_Name),"miu miu") ~ "Miu Miu",
+                                                     str_detect(tolower(Page_Name),"prada") ~ "Prada",
+                                                     str_detect(tolower(Page_Name),"saint laurent") ~ "Saint Laurent",
+                                                     str_detect(tolower(Page_Name),"valentino") ~ "Valentino",
+                                                     str_detect(tolower(Page_Name),"versace") ~ "Versace"))
                 
         }
 }
