@@ -381,4 +381,32 @@ stop_function <- function(){
 }
 
 
-
+read_fans_social <- function(file){
+        if(str_detect(file, paste0(local_folder,"FB"))){
+                #read data
+                Fans <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
+                Fans <- Fans %>%
+                        mutate(Social_Network = "FB")
+        } else if(str_detect(file, paste0(local_folder,"IG"))){
+                #read data
+                Fans <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
+                Fans <- Fans %>%
+                        rename(Fans = Followers,
+                               Page = Profile) %>% 
+                        mutate(Social_Network = "IG")
+        } else if(str_detect(file, paste0(local_folder,"TW"))){
+                #read data
+                Fans <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
+                Fans <- Fans %>%
+                        rename(Fans = Followers,
+                               Page = Profile) %>% 
+                        mutate(Social_Network = "TW")
+        } else {
+                #read data
+                Fans <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
+                Fans <- Fans %>%
+                        rename(Fans = Subscribers,
+                               Page = Channel) %>% 
+                        mutate(Social_Network = "YT")
+        }
+}
