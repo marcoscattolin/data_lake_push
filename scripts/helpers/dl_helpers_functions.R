@@ -2,7 +2,7 @@ data_lake_push <- function(dataset, remote_file, tempfile = "k:/dept/DIGITAL E-C
         
         # write temporary file to temporary dir
         dataset %>%
-                write.csv2(file = tempfile, na = "", row.names = F)
+                write_csv(file = tempfile, na = "", row.names = F)
         upload_file <- upload_file(tempfile)
         
         
