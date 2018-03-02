@@ -7,10 +7,9 @@ data_lake_push <- function(dataset, remote_file, tempfile = "k:/dept/DIGITAL E-C
                         mutate_if(is.character, ~ gsub(pattern = "\n|\r\n",replacement = " ",x = .))
         }
         
-        
-        # write temporary file to temporary dir
         dataset %>%
                 write.csv(file = tempfile, na = "", quote = T, row.names = F, fileEncoding = "UTF-8")
+        
         upload_file <- upload_file(tempfile)
         
         
