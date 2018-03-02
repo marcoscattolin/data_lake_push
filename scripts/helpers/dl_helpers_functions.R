@@ -1,8 +1,14 @@
-data_lake_push <- function(dataset, remote_file, tempfile = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv", remove_temp = T){
+data_lake_push <- function(dataset, remote_file, tempfile = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv", remove_temp = T, clean_line_breaks = T){
+        
+        if(clean_line_breaks){
+                dataset <- dataset %>%
+                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n",replacement = " ",x = .))
+        }
+        
         
         # write temporary file to temporary dir
         dataset %>%
-                write_excel_csv(path = tempfile, na = "")
+                write_csv(path = tempfile, na = "")
         upload_file <- upload_file(tempfile)
         
         
