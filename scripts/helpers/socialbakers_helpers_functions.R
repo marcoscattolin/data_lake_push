@@ -98,7 +98,7 @@ read_posts_social <- function(file){
         } else {
                 
                 #read data
-                Posts <- read_excel(path = local_files[4], sheet = 2,skip = 1,col_names = T)
+                Posts <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
                 
                 #read colnames
                 PreviousHeader_YT <- colnames(Posts)
