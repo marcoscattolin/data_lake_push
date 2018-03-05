@@ -1,4 +1,4 @@
-data_lake_push <- function(dataset, remote_file, tempfile = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv", remove_temp = T, clean_line_breaks = T){
+data_lake_push <- function(dataset, remote_file, temppath = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/", remove_temp = T, clean_line_breaks = T){
         
         options(scipen=999)
         
@@ -6,6 +6,8 @@ data_lake_push <- function(dataset, remote_file, tempfile = "k:/dept/DIGITAL E-C
                 dataset <- dataset %>%
                         mutate_if(is.character, ~ gsub(pattern = "\n|\r\n",replacement = " ",x = .))
         }
+        
+        tempfile <- paste0(temppath,"push_tmp_",format(Sys.time(),"%Y%m%d_%H%M%S"),".csv")
         
         dataset %>%
                 write.csv2(file = tempfile, na = "", quote = T, row.names = F, fileEncoding = "UTF-8")
@@ -30,20 +32,22 @@ data_lake_push <- function(dataset, remote_file, tempfile = "k:/dept/DIGITAL E-C
         
 }
 
-data_lake_fetch <- function(data_lake_file, remove_temp = T, temp_file = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv"){
+data_lake_fetch <- function(data_lake_file, remove_temp = T, temppath = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/"){
         
         #download file
         r <- httr::GET(paste0("https://pradadigitaldatalake.azuredatalakestore.net/webhdfs/v1/",data_lake_file,"?op=OPEN&read=true"),
                        add_headers(Authorization = paste0("Bearer ",res$access_token)))
         
+        tempfile <- paste0(temppath, "fetch_tmp_",format(Sys.time(),"%Y%m%d_%H%M%S"),".csv")
+        
         #write to temp dir
-        writeBin(content(r), temp_file) 
+        writeBin(content(r), tempfile) 
         
         #read
-        dataset<- read_csv2(temp_file, col_types = cols(.default = col_character()))
+        dataset<- read_csv2(tempfile, col_types = cols(.default = col_character()))
         
         if(remove_temp){
-                r <- file.remove(temp_file)
+                r <- file.remove(tempfile)
         }
         
         
