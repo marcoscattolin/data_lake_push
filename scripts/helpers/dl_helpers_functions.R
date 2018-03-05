@@ -1,4 +1,4 @@
-data_lake_push <- function(dataset, remote_file, temppath = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/", remove_temp = T, clean_line_breaks = T){
+data_lake_push <- function(dataset, remote_file, temppath = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/", remove_temp = T, clean_line_breaks = T, preserve_chinese = F){
         
         options(scipen=999)
         
@@ -9,8 +9,19 @@ data_lake_push <- function(dataset, remote_file, temppath = "k:/dept/DIGITAL E-C
         
         tempfile <- paste0(temppath,"push_tmp_",format(Sys.time(),"%Y%m%d_%H%M%S"),".csv")
         
-        dataset %>%
-                write.csv2(file = tempfile, na = "", quote = T, row.names = F, fileEncoding = "UTF-8")
+        if(!preserve_chinese){
+                dataset %>%
+                        write.csv2(file = tempfile, na = "", quote = T, row.names = F, fileEncoding = "UTF-8")
+        } else {
+                
+                for(i in which(sapply(dataset, is.character))){
+                        Encoding(dataset[[i]]) <- "unknown"
+                }
+                
+                dataset %>%
+                        write.csv2(file = tempfile, na = "", quote = T, row.names = F)
+        }
+        
         
         upload_file <- upload_file(tempfile)
         
