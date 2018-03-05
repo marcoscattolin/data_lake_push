@@ -24,35 +24,16 @@ lapply(local_files,col_check)
 stop_function()
 
 # READ POSTS -------------------------------------------------------------------
-Posts <- lapply(local_files,read_posts_social) %>% 
+Post <- lapply(local_files,read_posts_social) %>% 
         bind_rows()
 remote_file <- "social/Posts/Posts_2018_01.csv"
 
 
-# UPLOAD POSTS TO DATA LAKE -----------------------------------------------------
-
+# UPLOAD TO DATA LAKE -----------------------------------------------------
 #source token
 source("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/token/azure_token.r")
-
-# write file to temporary dir
-tempfile <- "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv"
-Posts %>%
-        write.csv2(file = tempfile, na = "", row.names = F, dec = ",")
-upload_file <- upload_file(tempfile)
-
-
-
-#upload
-put_url <- paste0("https://pradadigitaldatalake.azuredatalakestore.net/webhdfs/v1/",remote_file,"?op=CREATE&overwrite=true&write=true")
-r <- httr::PUT(put_url,
-               body = upload_file,
-               add_headers(Authorization = paste0("Bearer ",res$access_token),
-                           "Transfer-Encoding" = "chunked"), progress())
-r$status_code
-file.remove(tempfile)
-
-
-
+source("scripts/helpers/dl_helpers_functions.R")
+data_lake_push(Post, remote_file)
 
 
 #############
@@ -70,29 +51,16 @@ local_files <- list.files(local_folder, full.names = T, pattern = "xlsx$")
 # READ FANS -------------------------------------------------------------------
 Fans <- lapply(local_files,read_fans_social) %>% 
         bind_rows()
-remote_file <- "social/Fans/Fans_2017_12.csv"
+remote_file <- "social/Fans/Fans_2018_01.csv"
 
 
-# UPLOAD POSTS TO DATA LAKE -----------------------------------------------------
-
+# UPLOAD TO DATA LAKE -----------------------------------------------------
 #source token
 source("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/token/azure_token.r")
+source("scripts/helpers/dl_helpers_functions.R")
+data_lake_push(Fans, remote_file)
 
-# write file to temporary dir
-tempfile <- "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv"
-Fans %>%
-        write.csv2(file = tempfile, na = "", row.names = F, dec = ",")
-upload_file <- upload_file(tempfile)
-
-
-
-#upload
-put_url <- paste0("https://pradadigitaldatalake.azuredatalakestore.net/webhdfs/v1/",remote_file,"?op=CREATE&overwrite=true&write=true")
-r <- httr::PUT(put_url,
-               body = upload_file,
-               add_headers(Authorization = paste0("Bearer ",res$access_token),
-                           "Transfer-Encoding" = "chunked"), progress())
-r$status_code
-file.remove(tempfile)
-
+# END OF SCRIPT -----------------------------------------------------------
+cat("Script completed, hit Return to finish...")
+a <- readLines(file("stdin"),1)
 

@@ -22,10 +22,11 @@ read_posts_social <- function(file){
                         select(-starts_with("temp")) 
                 
                 #rename modified column
+                if("Total_View_Time_(sec)" %in% colnames(Posts)){
                 Posts <- Posts %>% 
                         rename(Video_View_Time_sec = `Total_View_Time_(sec)`)
+                }
 
-                
         } else if(str_detect(file, paste0(local_folder,"IG"))){
                 
                 #read data
