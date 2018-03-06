@@ -24,7 +24,7 @@ lapply(local_files,col_check)
 stop_function()
 
 # READ POSTS -------------------------------------------------------------------
-Post <- lapply(local_files,read_posts_social) %>% 
+Posts <- lapply(local_files,read_posts_social) %>% 
         bind_rows()
 remote_file <- "social/Posts/Posts_2018_01.csv"
 
@@ -33,7 +33,7 @@ remote_file <- "social/Posts/Posts_2018_01.csv"
 #source token
 source("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/token/azure_token.r")
 source("scripts/helpers/dl_helpers_functions.R")
-data_lake_push(Post, remote_file)
+data_lake_push(Posts, remote_file)
 
 
 #############
