@@ -28,7 +28,7 @@ read_posts_social <- function(file){
                 }
                 
                 Posts <- Posts %>%
-                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n",replacement = " ",x = .))      
+                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n|\r",replacement = " ",x = .))      
 
         } else if(str_detect(file, paste0(local_folder,"IG"))){
                 
@@ -65,7 +65,7 @@ read_posts_social <- function(file){
                         mutate(Social_Network = "IG") %>% 
                         select(-starts_with("temp"))
                 Posts <- Posts %>%
-                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n",replacement = " ",x = .))
+                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n|\r",replacement = " ",x = .))
 
                 
         } else if(str_detect(file, paste0(local_folder,"TW"))){
@@ -101,7 +101,7 @@ read_posts_social <- function(file){
                         select(-starts_with("temp"))
                 
                 Posts <- Posts %>%
-                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n",replacement = " ",x = .))
+                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n|\r",replacement = " ",x = .))
         
                 
         } else {
@@ -142,7 +142,7 @@ read_posts_social <- function(file){
                         select(-starts_with("temp"))
                 
                 Posts <- Posts %>%
-                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n",replacement = " ",x = .))
+                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n|\r",replacement = " ",x = .))
                 
                 
         }
