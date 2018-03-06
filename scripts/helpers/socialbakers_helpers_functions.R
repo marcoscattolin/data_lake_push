@@ -22,10 +22,14 @@ read_posts_social <- function(file){
                         select(-starts_with("temp")) 
                 
                 #rename modified column
+                if("Total_View_Time_(sec)" %in% colnames(Posts)){
                 Posts <- Posts %>% 
                         rename(Video_View_Time_sec = `Total_View_Time_(sec)`)
-
+                }
                 
+                Posts <- Posts %>%
+                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n|\r",replacement = " ",x = .))      
+
         } else if(str_detect(file, paste0(local_folder,"IG"))){
                 
                 #read data
@@ -60,6 +64,8 @@ read_posts_social <- function(file){
                 Posts <- Posts %>% 
                         mutate(Social_Network = "IG") %>% 
                         select(-starts_with("temp"))
+                Posts <- Posts %>%
+                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n|\r",replacement = " ",x = .))
 
                 
         } else if(str_detect(file, paste0(local_folder,"TW"))){
@@ -93,12 +99,15 @@ read_posts_social <- function(file){
                 Posts <- Posts %>% 
                         mutate(Social_Network = "TW") %>% 
                         select(-starts_with("temp"))
+                
+                Posts <- Posts %>%
+                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n|\r",replacement = " ",x = .))
         
                 
         } else {
                 
                 #read data
-                Posts <- read_excel(path = local_files[4], sheet = 2,skip = 1,col_names = T)
+                Posts <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
                 
                 #read colnames
                 PreviousHeader_YT <- colnames(Posts)
@@ -131,6 +140,9 @@ read_posts_social <- function(file){
                 Posts <- Posts %>% 
                         mutate(Social_Network = "YT") %>% 
                         select(-starts_with("temp"))
+                
+                Posts <- Posts %>%
+                        mutate_if(is.character, ~ gsub(pattern = "\n|\r\n|\r",replacement = " ",x = .))
                 
                 
         }
