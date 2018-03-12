@@ -26,7 +26,7 @@ stop_function()
 # READ POSTS -------------------------------------------------------------------
 Posts <- lapply(local_files,read_posts_social) %>% 
         bind_rows()
-remote_file <- "social/Posts/Posts_2018_01.csv"
+remote_file <- "social/Posts/Posts_2018_02.csv"
 
 
 # UPLOAD TO DATA LAKE -----------------------------------------------------
@@ -51,7 +51,7 @@ local_files <- list.files(local_folder, full.names = T, pattern = "xlsx$")
 # READ FANS -------------------------------------------------------------------
 Fans <- lapply(local_files,read_fans_social) %>% 
         bind_rows()
-remote_file <- "social/Fans/Fans_2018_01.csv"
+remote_file <- "social/Fans/Fans_2018_02.csv"
 
 
 # UPLOAD TO DATA LAKE -----------------------------------------------------
