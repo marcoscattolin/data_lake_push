@@ -60,7 +60,9 @@ read_posts_social <- function(file){
                                temp = `Thumbnail Url`,
                                Grade = Grade,
                                Promoted_Post_Detection = `Promoted Post Detection`,
-                               Views = `Video Views`)
+                               Views = `Video Views`,
+                               temp2 = Saves,
+                               Engaged_Users = Engagement)
                 
                 Posts <- Posts %>% 
                         mutate(Social_Network = "IG") %>% 
