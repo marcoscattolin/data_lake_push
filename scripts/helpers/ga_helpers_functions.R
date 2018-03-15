@@ -206,7 +206,7 @@ ga_get_most_viewed <- function(ref_day, brand, paginate_query = F, use_miumiu_mi
         most_viewed %>% 
                 mutate(country_code = str_sub(pagePathLevel3,-3) %>% str_sub(.,1,2) %>% toupper()) %>% 
                 filter(grepl("^[A-Z0-9]{4,}",eventLabel)) %>% 
-                mutate(sku = eventLabel) %>% 
+                mutate(sku = gsub("-","_",eventLabel)) %>% 
                 group_by(sku,country_code,brand) %>% 
                 summarise(views = sum(totalEvents)) %>% 
                 ungroup()
