@@ -30,7 +30,8 @@ read_marchesi_custom <- function(file){
                   "tel1_discard",
                   "provincia_discard",
                   "paese_discard",
-                  "email_discard")
+                  "email_discard",
+                  "last_discard")
         
         marchesi <- read_delim(file, delim = "|", skip = 6, col_names = cols)
         
