@@ -23,7 +23,7 @@ paths <- data_lake_fetch(data_lake_file)
 # upload files
 map2(.x = paths$wcs_path,.y = paths$data_lake_path, function(.x,.y){
         dataset <- download_wcs(.x)
-        data_lake_push(dataset, remote_file = .y, preserve_chinese = T,remove_temp = F)
+        data_lake_push(dataset, remote_file = .y, preserve_chinese = T,remove_temp = T)
 })
 
 
