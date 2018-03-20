@@ -25,8 +25,9 @@ search_console_get_data <- function(end_date){
         
         
         # BUILD QUERY GRID -----------------------------------------------------------
-        countries <- read.csv2("K:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/ecommerce_report/data/maps/country_map.csv", sep = ";") %>% 
-                mutate_all(tolower)
+        countries <- pull_countries()
+        
+        file.remove("K:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv")
         
         stores <- website %>% 
                 mutate(country_iso_code = str_extract(siteUrl,pattern = "/(prada|miumiu)../$")) %>% 
@@ -92,6 +93,8 @@ pull_countries <- function(){
         r <- httr::GET(paste0("https://pradadigitaldatalake.azuredatalakestore.net/webhdfs/v1/",data_lake_file,"?op=OPEN&read=true"),
                                add_headers(Authorization = paste0("Bearer ",res$access_token)))
         
-        writeBin(r, "~/01.analytics/Test/temp.csv")
-        data <- read.csv("~/01.analytics/Test/temp.csv")
+        writeBin(content(r), "K:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv")
+        countries <- read.csv("K:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv", sep = ";") %>% 
+                mutate_all(tolower)
+        
 }
