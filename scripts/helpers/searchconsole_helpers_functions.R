@@ -9,7 +9,7 @@ library(lubridate)
 
 search_console_get_data <- function(end_date){
         # SET START DATE
-        start_date <- ymd(paste0(year(end_date),"-",month(end_date),"-", "01"))
+        start_date <- end_date - 90
         
         
         # options("googleAuthR.client_id" = "797888071372-v3q8h1f3r7q2356drtg0nhl44m5juu7k.apps.googleusercontent.com")
