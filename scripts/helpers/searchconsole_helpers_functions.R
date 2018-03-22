@@ -1,10 +1,4 @@
-library(tidyverse)
-library(searchConsoleR)
-library(stringr)
-library(httr)
-library(jsonlite)
-library(curl)
-library(lubridate)
+
 
 
 search_console_get_data <- function(end_date){
@@ -25,7 +19,8 @@ search_console_get_data <- function(end_date){
         
         
         # BUILD QUERY GRID -----------------------------------------------------------
-        countries <- pull_countries()
+        countries <- pull_countries() %>% 
+                filter(!country_iso_code %in% c("mi","hw"))
         
         file.remove("K:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.csv")
         
@@ -70,7 +65,8 @@ search_console_get_data <- function(end_date){
                        brand = case_when(str_detect(domain,"prada")~ "P",
                                          str_detect(domain,"miumiu")~ "M",
                                          str_detect(domain,"carshoe")~ "KS",T ~"MA")) %>% 
-                filter(!is.na(date))
+                filter(!is.na(date)) %>% 
+                left_join(select(countries,country_iso_code,country = country_iso_code3))
 
 }
 
