@@ -22,10 +22,10 @@ remote_file <- queries %>%
         summarise(d = min(date)) %>% 
         pull(d)
 remote_file
-remote_file <- paste0("searchconsole/queries_",str_sub(remote_file,1,4),"_",str_sub(remote_file,6,7),".csv")
+remote_file <- paste0("searchconsole/queries.csv")
 
 # upload to data lake
-source("scripts/helpers/dl_helpers_functions.R")
+source("scripts/helpers/dl_helpers_functions_searchconsole.R")
 data_lake_push(queries, remote_file)
 
 
