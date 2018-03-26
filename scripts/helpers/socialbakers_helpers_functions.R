@@ -333,9 +333,17 @@ stop_function <- function(){
 read_fans_social <- function(file){
         if(str_detect(file, paste0(local_folder,"FB"))){
                 #read data
-                Fans <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
-                Fans <- Fans %>%
-                        mutate(Social_Network = "FB")
+                if("Fans" %in% colnames(read_excel(path = file, sheet = 4, skip = 1, col_names = T))){
+                        Fans <- read_excel(path = file, sheet = 4,skip = 1,col_names = T)
+                        Fans <- Fans %>% 
+                                mutate(Page = str_trim(str_replace(Page,"Global Statistics",""),side = "both"),
+                                       Social_Network = "FB")
+                } else{
+                     Fans <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
+                     Fans <- Fans %>% 
+                             mutate(Social_Network = "FB")
+                }
+                
         } else if(str_detect(file, paste0(local_folder,"IG"))){
                 #read data
                 Fans <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
