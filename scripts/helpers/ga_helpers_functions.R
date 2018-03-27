@@ -165,7 +165,7 @@ ga_get_views <- function(brand, ref_day, split_daywise = F,use_carshoe_raw = F){
                 # modified for go live china
                 segment_id <- "gaid::J09RpBPURA2XrNwnp9ih4A"
         } else if(brand == "M"){
-                segment_id <- "gaid::7xcJH6ZkRN2HQOGhoyz98A"
+                segment_id <- "gaid::J09RpBPURA2XrNwnp9ih4A"
         } else if(brand == "MA"){
                 segment_id <- "gaid::OJMUdSU9RiK0BdphC3T0Zg"
         } else if(brand == "KS" & use_carshoe_raw == T){
