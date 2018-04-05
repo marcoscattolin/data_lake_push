@@ -83,16 +83,34 @@ ga_get_grouped_traffic <- function(brand, start_date, end_date, segment_id, spli
         
         
         #  get traffic from social but logins
-        visits <- ga_get_data(start_date = start_date, 
-                              end_date = end_date, 
-                              brand = brand,
-                              dimensions = "ga:date,ga:countryIsoCode,ga:source,ga:medium,ga:campaign", 
-                              metrics = "ga:sessions,ga:transactions,ga:bounces,ga:newUsers,ga:pageviews", 
-                              segments = segment_id,
-                              filters = "ga:landingPagePath!@SocialSignIn",
-                              split_daywise = split_daywise,
-                              use_carshoe_raw = use_carshoe_raw) %>% 
-                mutate(brand = brand, landingPagePath = "not social")
+        if(brand == "KS" & use_carshoe_raw == F){
+                visits <- ga_get_data(start_date = start_date, 
+                                      end_date = end_date, 
+                                      brand = brand,
+                                      dimensions = "ga:date,ga:countryIsoCode,ga:source,ga:medium,ga:campaign", 
+                                      metrics = "ga:sessions,ga:transactions,ga:bounces,ga:newUsers,ga:pageviews,ga:goalCompletionsAll", 
+                                      segments = segment_id,
+                                      filters = "ga:landingPagePath!@SocialSignIn",
+                                      split_daywise = split_daywise,
+                                      use_carshoe_raw = use_carshoe_raw) %>% 
+                        mutate(brand = brand, 
+                               landingPagePath = "not social",
+                               transactions = goalCompletionsAll) %>% 
+                        select(-goalCompletionsAll)
+        } else {
+                visits <- ga_get_data(start_date = start_date, 
+                                      end_date = end_date, 
+                                      brand = brand,
+                                      dimensions = "ga:date,ga:countryIsoCode,ga:source,ga:medium,ga:campaign", 
+                                      metrics = "ga:sessions,ga:transactions,ga:bounces,ga:newUsers,ga:pageviews", 
+                                      segments = segment_id,
+                                      filters = "ga:landingPagePath!@SocialSignIn",
+                                      split_daywise = split_daywise,
+                                      use_carshoe_raw = use_carshoe_raw) %>% 
+                        mutate(brand = brand, landingPagePath = "not social")
+        }
+        
+        
         
         #  get traffic from social logins (after 5-5-2017 for Prada, after 29-12-2017 for miu miu)
         if(brand == "P"){
