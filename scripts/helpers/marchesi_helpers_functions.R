@@ -44,7 +44,8 @@ read_marchesi_custom <- function(file){
                 mutate(day = dmy(day)) %>% 
                 mutate(value_local = gsub("\\.","",value_local) %>% gsub(",",".",.) %>% as.numeric(.)) %>% 
                 select(-order_id) %>% 
-                filter(!is.na(value_local))
+                filter(!is.na(value_local)) %>% 
+                mutate(sale_type = "Regular")
         
 }
 
