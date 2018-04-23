@@ -278,3 +278,82 @@ sku_enrich <- function(ga_data,ecom_data, sku_col){
                 select(-key)
         
 }
+
+
+### CAMPAIGN
+
+ga_get_grouped_campaign <- function(brand, start_date, end_date, segment_id, split_daywise, use_carshoe_raw = F){
+        
+        
+        #  get traffic from social but logins
+        
+        campaign <- ga_get_data(start_date = start_date, 
+                                end_date = end_date, 
+                                brand = brand,
+                                dimensions = "ga:date,ga:countryIsoCode,ga:source,ga:medium,ga:campaign", 
+                                metrics = "ga:sessions,ga:transactions,ga:bounces,ga:newUsers,ga:pageviews", 
+                                segments = segment_id,
+                                filters = "ga:landingPagePath!@SocialSignIn",
+                                split_daywise = split_daywise,
+                                use_carshoe_raw = use_carshoe_raw) %>% 
+                mutate(brand = brand)
+        
+        
+        
+        
+        
+        # new channel grouping
+        campaign <- campaign %>% 
+                mutate(custom_grouping = case_when(source == "(direct)" & medium == "(none)" ~ "Direct",
+                                                   medium == "organic" ~ "Natural Search",
+                                                   medium == "referral" & campaign == "(not set)" & grepl(pattern = "(.*facebook.*)|(.*instagram.*)|(.*t\\.co$)|(.*pinterest.*)|(.*vk\\.com.*)|(.*twitter.*)|(.*youtube.*)|(^line$)", source) ~ "Referrals from socials",
+                                                   medium == "referral" & campaign == "(not set)" ~ "Referrals non-social",
+                                                   grepl("social[-_]post",medium) & campaign != "(not set)" ~ "Social Posts",
+                                                   medium == "sa" | medium == "social_ad" ~ "Social Paid Campaigns",
+                                                   grepl("email|mail",medium)  ~ "Email",
+                                                   grepl("cpc|mse",medium) ~ "Paid Search",
+                                                   grepl("display|affiliate|video|video_ad|branded_content|native",medium)  ~ "Display",
+                                                   grepl(" ^(cpv|cpa|cpp|content-text)$",medium) | campaign != "(not set)" ~ "Other Campaigns",
+                                                   TRUE ~ "(Other)")) %>% 
+                filter(campaign != "(not set)") %>% 
+                group_by(date,countryIsoCode,brand,campaign,custom_grouping,source) %>% 
+                summarise_at(vars(sessions,transactions,bounces,newUsers,pageviews),sum)
+        
+        # rename to standard channel
+        campaign <- campaign %>% 
+                ungroup() %>% 
+                rename(channelGrouping = custom_grouping) %>% 
+                separate(col = campaign,into = c("created_date", "campaign_name","campaign_country","campaign_info"), sep = "_", remove = F)
+        
+}
+
+ga_get_campaign <- function(brand, ref_day, split_daywise = F,use_carshoe_raw = F){
+        
+        #subset to e-store countries
+        
+        if(brand == "P"){
+                # modified for go live china
+                segment_id <- "gaid::J09RpBPURA2XrNwnp9ih4A"
+        } else if(brand == "M"){
+                segment_id <- "gaid::J09RpBPURA2XrNwnp9ih4A"
+        } else if(brand == "MA"){
+                segment_id <- "gaid::OJMUdSU9RiK0BdphC3T0Zg"
+        } else if(brand == "KS" & use_carshoe_raw == T){
+                segment_id <- "gaid::wpN-5UBESBuzUedlpmhLSg"
+        } else {
+                segment_id <- "gaid::r9VnChzwQduyWOb50bwN1w"
+        }
+        
+        
+        start_date <- ymd(paste0(year(ref_day),"-",month(ref_day),"-", "01"))
+        
+        
+        campaign <- ga_get_grouped_campaign(start_date = start_date, 
+                                            end_date = ref_day, 
+                                            brand = brand,
+                                            segment_id = segment_id, 
+                                            split_daywise = split_daywise,
+                                            use_carshoe_raw = use_carshoe_raw)
+        
+        
+}
