@@ -24,7 +24,8 @@ read_posts_social <- function(file){
                 #rename modified column
                 if("Total_View_Time_(sec)" %in% colnames(Posts)){
                 Posts <- Posts %>% 
-                        rename(Video_View_Time_sec = `Total_View_Time_(sec)`)
+                        rename(Video_View_Time_sec = `Total_View_Time_(sec)`,
+                               Crossposted = Crosspost)
                 }
                 
                 Posts <- Posts %>%
