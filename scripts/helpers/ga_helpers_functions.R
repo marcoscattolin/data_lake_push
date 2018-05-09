@@ -312,7 +312,7 @@ ga_get_grouped_campaign <- function(brand, start_date, end_date, segment_id, spl
                                                    medium == "sa" | medium == "social_ad" ~ "Social Paid Campaigns",
                                                    grepl("email|mail",medium)  ~ "Email",
                                                    grepl("cpc|mse",medium) ~ "Paid Search",
-                                                   grepl("display|affiliate|video|video_ad|branded_content|native",medium)  ~ "Display",
+                                                   grepl("display|affiliate|video|video_ad|branded_content|native|programmatic",medium)  ~ "Display",
                                                    grepl(" ^(cpv|cpa|cpp|content-text)$",medium) | campaign != "(not set)" ~ "Other Campaigns",
                                                    TRUE ~ "(Other)")) %>% 
                 filter(campaign != "(not set)") %>% 
@@ -323,7 +323,10 @@ ga_get_grouped_campaign <- function(brand, start_date, end_date, segment_id, spl
         campaign <- campaign %>% 
                 ungroup() %>% 
                 rename(channelGrouping = custom_grouping) %>% 
-                separate(col = campaign,into = c("created_date", "campaign_name","campaign_country","campaign_info"), sep = "_", remove = F)
+                separate(col = campaign,into = c("created_date", "campaign_name","campaign_country","campaign_info"), sep = "_", remove = F) %>% 
+                mutate(created_date = ymd(created_date),
+                       campaign_name = tolower(campaign_name))
+                
         
 }
 
