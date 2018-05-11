@@ -12,7 +12,7 @@ source("scripts/helpers/ga_helpers_functions.R")
 
 # GET TRAFFIC -------------------------------------------------------------
 # get traffic from beginnin of month until ref_day
-traffic <- map_df(c("P","M","KS","MA"), ~ ga_get_views(brand = .x, ref_day = Sys.Date()-1, use_carshoe_raw = F))
+campaign <- map_df(c("P","M","KS","MA"), ~ ga_get_campaign(brand = .x, ref_day = Sys.Date()-1, use_carshoe_raw = F))
 
 
 # UPLOAD TO DATA LAKE -----------------------------------------------------
@@ -21,14 +21,14 @@ source("k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/token/
 
 
 # define remote file name
-remote_file <- traffic %>% 
+remote_file <- campaign %>% 
         summarise(d = min(date)) %>% 
         pull(d)
-remote_file <- paste0("googleanalytics/visits/visits_",str_sub(remote_file,1,4),"_",str_sub(remote_file,5,6),".csv")
+remote_file <- paste0("googleanalytics/campaign/campaign_",str_sub(remote_file,1,4),"_",str_sub(remote_file,5,6),".csv")
 
 # upload to data lake
 source("scripts/helpers/dl_helpers_functions.R")
-data_lake_push(traffic, remote_file)
+data_lake_push(campaign, remote_file)
 
 
 
