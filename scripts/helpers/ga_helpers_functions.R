@@ -257,6 +257,32 @@ ga_get_most_viewed_china <- function(ref_day, brand, paginate_query = F, use_miu
                 filter(sku != "") %>% 
                 ungroup()
         
+                
+        
+}
+
+ga_get_most_viewed_USA <- function(ref_day, brand, paginate_query = F, use_miumiu_mirror = F, lookback_days = 6){
+        
+        
+        
+        most_viewed_USA <- ga_get_data(start_date = ref_day-lookback_days,
+                                         end_date = ref_day,
+                                         brand = brand,
+                                         dimensions = "ga:pagePathLevel4",
+                                         metrics = "ga:pageviews",
+                                         filters = "ga:pagePath=~^www\\.prada\\.com/us/*;ga:pagePathLevel4=~product",
+                                         split_daywise = F,
+                                         paginate_query = paginate_query,
+                                         use_miumiu_mirror = use_miumiu_mirror)
+        
+        most_viewed_USA <- most_viewed_USA %>% 
+                mutate(sku = str_extract(pagePathLevel4,"[A-Z0-9_]*\\.html$") %>% gsub("\\.html$","",.)) %>% 
+                group_by(sku) %>% 
+                summarise(views = sum(pageviews)) %>% 
+                mutate(country_code = "US", brand = brand) %>% 
+                filter(sku != "") %>% 
+                ungroup()
+        
         
         
 }
