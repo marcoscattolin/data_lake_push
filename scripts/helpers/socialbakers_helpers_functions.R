@@ -42,23 +42,24 @@ read_posts_social <- function(file){
                 
                 #process data
                 Posts <- Posts %>%
+                        mutate(`Total Interactions` = case_when(is.na(`Total Interactions`)~`Organic Interactions`,
+                                                                T ~ `Total Interactions`),
+                               `Number of Total Interactions per 1000 Followers` = case_when(is.na(`Number of Total Interactions per 1000 Followers`)~`Number of Organic Interactions per 1000 Followers`,
+                                                                                             T ~ `Number of Total Interactions per 1000 Followers`)) %>% 
                         rename(Date = Date,
                                Page_Name = `Profile Name`,
                                URL = URL,
                                Page_Id = `Profile Id`,
                                Content = Content,
-                               View_on_Social = `View on Instagram`,
                                Created_Timezone = `Created Timezone`,
                                Content_Type = `Content Type`,
                                Reactions__Like  = `Total Likes`,
                                Comment_Count = `Total Comments`,
-                               Number_of_Interactions_per_1000_Fans = `Number of Interactions per 1000 Followers`,
+                               Number_of_Interactions_per_1000_Fans = `Number of Total Interactions per 1000 Followers`,
                                Labels = Labels,
-                               Interaction_Count = `Interaction Count`,
+                               Interaction_Count = `Total Interactions`,
+                               Picture_Url = `Media Url`,
                                Post_Id = Id,
-                               Picture_Url = `Picture Url`,
-                               Icon_Url = `Low Quality Picture Url`,
-                               temp = `Thumbnail Url`,
                                Grade = Grade,
                                Promoted_Post_Detection = `Promoted Post Detection`,
                                Views = `Video Views`,
@@ -84,7 +85,7 @@ read_posts_social <- function(file){
                 #process data
                 Posts <- Posts %>%
                         rename(Date = Date,
-                               Page_Name = `Page Name`,
+                               Page_Name = `Profile Name`,
                                URL = URL,
                                Page_Id = `Profile Id`,
                                Content = Content,

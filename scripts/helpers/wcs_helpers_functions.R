@@ -1,7 +1,7 @@
 
 
 # WCS REPORT -------------------------------------------------------
-download_wcs <- function(url,temp = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.xls", remove_temporary = T){
+download_wcs <- function(url,temp = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Report E-Commerce/data_lake/temp/temp.xlsx", remove_temporary = T){
         
         
         h <- new_handle()

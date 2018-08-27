@@ -16,8 +16,8 @@ source("scripts/helpers/dl_helpers_functions.R")
 
 #download file paths
 data_lake_file <- "wcs/path/wcsfilepaths.csv"
-paths <- data_lake_fetch(data_lake_file)
-
+paths <- data_lake_fetch(data_lake_file) %>% 
+        mutate(wcs_path = paste0(wcs_path,"x"))
 
 
 # upload files
