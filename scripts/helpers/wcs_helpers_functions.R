@@ -8,7 +8,7 @@ download_wcs <- function(url,temp = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Repor
         handle_setopt(h, ssl_verifypeer = F)
         curl_download(url, temp, handle = h)
         
-        wcs <- read_excel(temp, sheet = 1)
+        wcs <- read_xlsx(temp, sheet = 1, guess_max = 70000)
         
         if(remove_temporary){
                 file.remove(temp)
@@ -16,6 +16,3 @@ download_wcs <- function(url,temp = "k:/dept/DIGITAL E-COMMERCE/E-COMMERCE/Repor
         
         wcs
 }
-
-
-

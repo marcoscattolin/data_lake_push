@@ -20,6 +20,15 @@ paths <- data_lake_fetch(data_lake_file) %>%
         mutate(wcs_path = paste0(wcs_path,"x"))
 
 
+pathReturn <- paths %>%
+        mutate(data_lake_path = "wcs/returns.csv",
+               wcs_path = "https://backofficewcs.pradagroup.net:8000/pradareports/csrRmaReport.xlsx")
+
+pathReturn <- pathReturn[1,]
+
+paths <- paths %>% 
+        bind_rows(pathReturn)
+
 # upload files
 map2(.x = paths$wcs_path,.y = paths$data_lake_path, function(.x,.y){
         dataset <- download_wcs(.x)
