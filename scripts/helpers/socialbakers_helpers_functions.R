@@ -2,7 +2,7 @@
 read_posts_social <- function(file){
         if(str_detect(file, paste0(local_folder,"FB"))){
                 #read data
-                Posts <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
+                Posts <- read_excel(path = file, sheet = 1,col_names = T)
                 
                 #read colnames
                 PreviousHeader_FB <- colnames(Posts)
