@@ -88,7 +88,7 @@ ga_get_grouped_traffic <- function(brand, start_date, end_date, segment_id, spli
                                       end_date = end_date, 
                                       brand = brand,
                                       dimensions = "ga:date,ga:countryIsoCode,ga:source,ga:medium,ga:campaign", 
-                                      metrics = "ga:sessions,ga:transactions,ga:bounces,ga:newUsers,ga:pageviews,ga:goalCompletionsAll", 
+                                      metrics = "ga:sessions,ga:transactions,ga:transactionRevenue,ga:bounces,ga:newUsers,ga:pageviews,ga:goalCompletionsAll", 
                                       segments = segment_id,
                                       filters = "ga:landingPagePath!@SocialSignIn",
                                       split_daywise = split_daywise,
@@ -102,7 +102,7 @@ ga_get_grouped_traffic <- function(brand, start_date, end_date, segment_id, spli
                                       end_date = end_date, 
                                       brand = brand,
                                       dimensions = "ga:date,ga:countryIsoCode,ga:source,ga:medium,ga:campaign", 
-                                      metrics = "ga:sessions,ga:transactions,ga:bounces,ga:newUsers,ga:pageviews", 
+                                      metrics = "ga:sessions,ga:transactions,ga:transactionRevenue,ga:bounces,ga:newUsers,ga:pageviews", 
                                       segments = segment_id,
                                       filters = "ga:landingPagePath!@SocialSignIn",
                                       split_daywise = split_daywise,
@@ -126,7 +126,7 @@ ga_get_grouped_traffic <- function(brand, start_date, end_date, segment_id, spli
                                       end_date = end_date, 
                                       brand = brand,
                                       dimensions = "ga:date,ga:countryIsoCode,ga:source,ga:medium,ga:campaign",
-                                      metrics = "ga:sessions,ga:transactions,ga:bounces,ga:newUsers,ga:pageviews", 
+                                      metrics = "ga:sessions,ga:transactions,ga:transactionRevenue,ga:bounces,ga:newUsers,ga:pageviews", 
                                       segments = segment_id,
                                       filters = "ga:landingPagePath=@SocialSignIn",
                                       split_daywise = F,
@@ -141,7 +141,7 @@ ga_get_grouped_traffic <- function(brand, start_date, end_date, segment_id, spli
                                       end_date = end_date, 
                                       brand = brand,
                                       dimensions = "ga:date,ga:countryIsoCode,ga:source,ga:medium,ga:campaign",
-                                      metrics = "ga:sessions,ga:transactions,ga:bounces,ga:newUsers,ga:pageviews", 
+                                      metrics = "ga:sessions,ga:transactions,ga:transactionRevenue,ga:bounces,ga:newUsers,ga:pageviews", 
                                       segments = segment_id,
                                       filters = "ga:landingPagePath=@SocialSignIn",
                                       split_daywise = T,
@@ -165,7 +165,7 @@ ga_get_grouped_traffic <- function(brand, start_date, end_date, segment_id, spli
                                                    landingPagePath == "social" & campaign == "(not set)" ~ "Social Login",
                                                    TRUE ~ "(Other)")) %>% 
                 group_by(date,countryIsoCode,brand,custom_grouping) %>% 
-                summarise_at(vars(sessions,transactions,bounces,newUsers,pageviews),sum)
+                summarise_at(vars(sessions,transactions,transactionRevenue,bounces,newUsers,pageviews),sum)
         
         # renam to standard channel
         visits <- visits %>% 
