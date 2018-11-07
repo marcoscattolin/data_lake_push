@@ -26,8 +26,15 @@ pathReturn <- paths %>%
 
 pathReturn <- pathReturn[1,]
 
+pathItems <- paths %>%
+        mutate(data_lake_path = "wcs/items.csv",
+               wcs_path = "https://backofficewcs.pradagroup.net:8000/pradareports/csrOrderitemsReport.xlsx")
+
+pathItems <- pathItems[1,]
+
 paths <- paths %>% 
-        bind_rows(pathReturn)
+        bind_rows(pathReturn) %>% 
+        bind_rows(pathItems)
 
 # upload files
 map2(.x = paths$wcs_path,.y = paths$data_lake_path, function(.x,.y){
@@ -41,5 +48,5 @@ map2(.x = paths$wcs_path,.y = paths$data_lake_path, function(.x,.y){
 
 
 # END OF SCRIPT -----------------------------------------------------------
-cat("Script completed, hit Return to finish...")
-a <- readLines(file("stdin"),1)
+#cat("Script completed, hit Return to finish...")
+#a <- readLines(file("stdin"),1)
