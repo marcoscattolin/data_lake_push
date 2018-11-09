@@ -2,7 +2,7 @@
 read_posts_social <- function(file){
         if(str_detect(file, paste0(local_folder,"FB"))){
                 #read data
-                Posts <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
+                Posts <- read_excel(path = file, sheet = 1,col_names = T)
                 
                 #read colnames
                 PreviousHeader_FB <- colnames(Posts)
@@ -13,7 +13,7 @@ read_posts_social <- function(file){
                 cols <- str_replace_all(cols," \\[\\%\\]", "")
                 cols <- str_replace_all(cols," ","_")
                 cols <- str_trim(cols,side = "both")
-                cols <- str_replace_all(cols,"Facebook", "Social")
+                cols <- str_replace_all(cols,"Facebook|facebook", "Social")
                 cols <- str_replace_all(cols,"-","")
                 cols <- str_replace_all(cols,"\\.","")
                 colnames(Posts) <- cols
@@ -34,7 +34,7 @@ read_posts_social <- function(file){
         } else if(str_detect(file, paste0(local_folder,"IG"))){
                 
                 #read data
-                Posts <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
+                Posts <- read_excel(path = file, sheet = 1,col_names = T)
                 
                 #read colnames
                 PreviousHeader_IG <- colnames(Posts)
@@ -42,25 +42,24 @@ read_posts_social <- function(file){
                 
                 #process data
                 Posts <- Posts %>%
+                        mutate(`Total Interactions` = case_when(is.na(`Total Interactions`)~`Organic Interactions`,
+                                                                T ~ `Total Interactions`),
+                               `Number of Total Interactions per 1000 Followers` = case_when(is.na(`Number of Total Interactions per 1000 Followers`)~`Number of Interactions per 1000 Followers`,
+                                                                                             T ~ `Number of Total Interactions per 1000 Followers`)) %>% 
                         rename(Date = Date,
                                Page_Name = `Profile Name`,
                                URL = URL,
                                Page_Id = `Profile Id`,
                                Content = Content,
-                               View_on_Social = `View on Instagram`,
                                Created_Timezone = `Created Timezone`,
                                Content_Type = `Content Type`,
                                Reactions__Like  = `Total Likes`,
                                Comment_Count = `Total Comments`,
-                               Number_of_Interactions_per_1000_Fans = `Number of Interactions per 1000 Followers`,
+                               Number_of_Interactions_per_1000_Fans = `Number of Total Interactions per 1000 Followers`,
                                Labels = Labels,
-                               Interaction_Count = `Interaction Count`,
+                               Interaction_Count = `Total Interactions`,
+                               Picture_Url = `Media Url`,
                                Post_Id = Id,
-                               Picture_Url = `Picture Url`,
-                               Icon_Url = `Low Quality Picture Url`,
-                               temp = `Thumbnail Url`,
-                               Grade = Grade,
-                               Promoted_Post_Detection = `Promoted Post Detection`,
                                Views = `Video Views`,
                                temp2 = Saves,
                                Engaged_Users = Engagement)
@@ -75,7 +74,7 @@ read_posts_social <- function(file){
         } else if(str_detect(file, paste0(local_folder,"TW"))){
                 
                 #read data
-                Posts <- read_excel(path = file, sheet = 2,skip = 1,col_names = T)
+                Posts <- read_excel(path = file, sheet = 1,col_names = T)
                 
                 #read colnames
                 PreviousHeader_TW <- colnames(Posts)
@@ -84,7 +83,7 @@ read_posts_social <- function(file){
                 #process data
                 Posts <- Posts %>%
                         rename(Date = Date,
-                               Page_Name = `Page Name`,
+                               Page_Name = `Profile Name`,
                                URL = URL,
                                Page_Id = `Profile Id`,
                                Content = Content,
@@ -161,7 +160,7 @@ col_check <- function(file){
                 load(file = paste0(local_folder,"check headers/Previous header FB.rda"))
                 
                 #read new headers
-                NewHeader_FB <- colnames(read_excel(path = file, sheet = 2,skip = 1,col_names = T))
+                NewHeader_FB <- colnames(read_excel(path = file, sheet = 1,col_names = T))
                 
                 #check column number
                 if(length(NewHeader_FB) == length(PreviousHeader_FB)){
@@ -200,7 +199,7 @@ col_check <- function(file){
                 load(file = paste0(local_folder,"check headers/Previous header IG.rda"))
                 
                 #read new headers
-                NewHeader_IG <- colnames(read_excel(path = file, sheet = 2,skip = 1,col_names = T))
+                NewHeader_IG <- colnames(read_excel(path = file, sheet = 1,col_names = T))
                 
                 #check column number
                 if(length(NewHeader_IG) == length(PreviousHeader_IG)){
@@ -239,7 +238,7 @@ col_check <- function(file){
                 load(file = paste0(local_folder,"check headers/Previous header TW.rda"))
                 
                 #read new headers
-                NewHeader_TW <- colnames(read_excel(path = file, sheet = 2,skip = 1,col_names = T))
+                NewHeader_TW <- colnames(read_excel(path = file, sheet = 1,col_names = T))
                 
                 #check column number
                 if(length(NewHeader_TW) == length(PreviousHeader_TW)){
@@ -278,7 +277,7 @@ col_check <- function(file){
                 load(file = paste0(local_folder,"check headers/Previous header YT.rda"))
                 
                 #read new headers
-                NewHeader_YT <- colnames(read_excel(path = file, sheet = 2,skip = 1,col_names = T))
+                NewHeader_YT <- colnames(read_excel(path = file, sheet = 1,col_names = T))
                 
                 #check column number
                 if(length(NewHeader_YT) == length(PreviousHeader_YT)){
