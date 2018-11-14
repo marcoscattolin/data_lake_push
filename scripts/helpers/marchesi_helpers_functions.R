@@ -29,7 +29,7 @@ read_marchesi_custom <- function(file){
                   "via_discard",
                   "tel1_discard",
                   "provincia_discard",
-                  "paese_discard",
+                  "country",
                   "email_discard")
         
         marchesi <- read_delim(file, delim = "|", skip = 6, col_names = cols)
@@ -37,7 +37,7 @@ read_marchesi_custom <- function(file){
         #process data
         marchesi <- marchesi %>% 
                 select_at(vars(-ends_with("discard"))) %>% 
-                mutate(country = str_sub(string = order_id,start = 1,end = 2)) %>% 
+                mutate(country = str_trim(country)) %>% 
                 mutate(brand = str_sub(string = order_id,start = 3,end = 4)) %>% 
                 mutate(commercial_class = str_sub(string = article_style_code, start = 1,end = 3)) %>% 
                 mutate(collection = "") %>% 
