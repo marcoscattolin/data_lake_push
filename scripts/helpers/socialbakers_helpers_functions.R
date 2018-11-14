@@ -53,6 +53,7 @@ read_posts_social <- function(file){
                                Content = Content,
                                Created_Timezone = `Created Timezone`,
                                Content_Type = `Content Type`,
+                               View_on_Social = `View on Instagram`,
                                Reactions__Like  = `Total Likes`,
                                Comment_Count = `Total Comments`,
                                Number_of_Interactions_per_1000_Fans = `Number of Total Interactions per 1000 Followers`,
