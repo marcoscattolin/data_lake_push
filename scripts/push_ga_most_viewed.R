@@ -16,7 +16,7 @@ ref_day <- Sys.Date()-1
 # get traffic for last 7 days
 most_viewed <- map_df(c("P","M","MA"), ~ ga_get_most_viewed(brand = .x, ref_day = ref_day, lookback_days = 7))
 most_viewed <- map_df(c("P"), ~ ga_get_most_viewed_newsite(brand = .x, ref_day = ref_day, lookback_days = 7)) %>% bind_rows(most_viewed,.) %>% 
-        group_by(country_code,brand,sku) %>% summarise(views = sum(views))
+        group_by(country_code,brand,sku,custom_grouping) %>% summarise(views = sum(views))
 most_viewed <- most_viewed %>% 
         mutate(last7daysuntil = ref_day)
 

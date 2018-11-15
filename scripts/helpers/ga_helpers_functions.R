@@ -212,9 +212,9 @@ ga_get_most_viewed <- function(ref_day, brand, paginate_query = F, use_miumiu_mi
         most_viewed <- ga_get_data(start_date = ref_day-lookback_days,
                     end_date = ref_day,
                     brand = brand,
-                    dimensions = "ga:pagePathLevel3,ga:eventLabel",
+                    dimensions = "ga:pagePathLevel3,ga:eventLabel,ga:medium,ga:source,ga:campaign",
                     metrics = "ga:totalEvents",
-                    filters = "ga:eventCategory==ecommerce,ga:eventAction==detail",
+                    filters = "ga:eventCategory==ecommerce,ga:eventAction==detail;ga:pagePath!=^www\\.prada\\.com/(us|ca|cn|it|de|es|gr|fr|mc|be|gb|ie|dk|fi|se|no|at|ch|nl|lu|hk)/*",
                     split_daywise = F,
                     paginate_query = paginate_query,
                     use_miumiu_mirror = use_miumiu_mirror) %>% 
@@ -222,10 +222,21 @@ ga_get_most_viewed <- function(ref_day, brand, paginate_query = F, use_miumiu_mi
                 mutate(brand = brand)
         
         most_viewed %>% 
-                mutate(country_code = str_sub(pagePathLevel3,-3) %>% str_sub(.,1,2) %>% toupper()) %>% 
+                mutate(country_code = str_sub(pagePathLevel3,-3) %>% str_sub(.,1,2) %>% toupper(),
+                       custom_grouping = case_when(source == "(direct)" & medium == "(none)" ~ "Direct",
+                                                          medium == "organic" ~ "Natural Search",
+                                                          medium == "referral" & campaign == "(not set)" & grepl(pattern = "(.*facebook.*)|(.*instagram.*)|(.*t\\.co$)|(.*pinterest.*)|(.*vk\\.com.*)|(.*twitter.*)|(.*youtube.*)|(^line$)", source) ~ "Referrals from socials",
+                                                          medium == "referral" & campaign == "(not set)" ~ "Referrals non-social",
+                                                          grepl("social[-_]post",medium) & campaign != "(not set)" ~ "Social Posts",
+                                                          medium == "sa" | medium == "social_ad" ~ "Social Paid Campaigns",
+                                                          grepl("email|mail",medium)  ~ "Email",
+                                                          grepl("cpc|mse",medium) ~ "Paid Search",
+                                                          grepl("display|affiliate|video|video_ad|branded_content|native",medium)  ~ "Display",
+                                                          grepl(" ^(cpv|cpa|cpp|content-text)$",medium) | campaign != "(not set)" ~ "Other Campaigns",
+                                                          TRUE ~ "(Other)")) %>% 
                 filter(grepl("^[A-Z0-9]{4,}",eventLabel)) %>% 
                 mutate(sku = gsub("-","_",eventLabel)) %>% 
-                group_by(sku,country_code,brand) %>% 
+                group_by(sku,country_code,brand,custom_grouping) %>% 
                 summarise(views = sum(totalEvents)) %>% 
                 ungroup()
         
@@ -242,17 +253,28 @@ ga_get_most_viewed_newsite <- function(ref_day, brand, paginate_query = F, use_m
         most_viewed_newsite <- ga_get_data(start_date = ref_day-lookback_days,
                                            end_date = ref_day,
                                            brand = brand,
-                                           dimensions = "ga:pagePath,ga:pagePathLevel4",
+                                           dimensions = "ga:pagePath,ga:pagePathLevel4,ga:medium,ga:source,ga:campaign",
                                            metrics = "ga:pageviews",
-                                           filters = "ga:pagePath=~^www\\.prada\\.com/(us|ca|cn|it|de|es|gr|fr|mc|be|gb|ie|dk|fi|se|no|at|ch|nl|lu)/*;ga:pagePathLevel4=~product",
+                                           filters = "ga:pagePath=~^www\\.prada\\.com/(us|ca|cn|it|de|es|gr|fr|mc|be|gb|ie|dk|fi|se|no|at|ch|nl|lu|hk)/*;ga:pagePathLevel4=~product",
                                            split_daywise = F,
                                            paginate_query = paginate_query,
                                            use_miumiu_mirror = use_miumiu_mirror)
         
         most_viewed_newsite <- most_viewed_newsite %>% 
                 mutate(sku = str_extract(pagePathLevel4,"[A-Z0-9_]*\\.html$") %>% gsub("\\.html$","",.)) %>% 
-                mutate(country_code = toupper(str_sub(pagePath,15,16)), brand = brand) %>% 
-                group_by(country_code,brand,sku) %>% 
+                mutate(country_code = toupper(str_sub(pagePath,15,16)), brand = brand,
+                       custom_grouping = case_when(source == "(direct)" & medium == "(none)" ~ "Direct",
+                                                          medium == "organic" ~ "Natural Search",
+                                                          medium == "referral" & campaign == "(not set)" & grepl(pattern = "(.*facebook.*)|(.*instagram.*)|(.*t\\.co$)|(.*pinterest.*)|(.*vk\\.com.*)|(.*twitter.*)|(.*youtube.*)|(^line$)", source) ~ "Referrals from socials",
+                                                          medium == "referral" & campaign == "(not set)" ~ "Referrals non-social",
+                                                          grepl("social[-_]post",medium) & campaign != "(not set)" ~ "Social Posts",
+                                                          medium == "sa" | medium == "social_ad" ~ "Social Paid Campaigns",
+                                                          grepl("email|mail",medium)  ~ "Email",
+                                                          grepl("cpc|mse",medium) ~ "Paid Search",
+                                                          grepl("display|affiliate|video|video_ad|branded_content|native",medium)  ~ "Display",
+                                                          grepl(" ^(cpv|cpa|cpp|content-text)$",medium) | campaign != "(not set)" ~ "Other Campaigns",
+                                                          TRUE ~ "(Other)")) %>% 
+                group_by(country_code,brand,sku,custom_grouping) %>% 
                 summarise(views = sum(pageviews)) %>% 
                 filter(sku != "") 
         
