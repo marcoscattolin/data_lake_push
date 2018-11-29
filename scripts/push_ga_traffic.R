@@ -12,7 +12,7 @@ source("scripts/helpers/ga_helpers_functions.R")
 
 # GET TRAFFIC -------------------------------------------------------------
 # get traffic from beginnin of month until ref_day
-traffic <- map_df(c("P","M","MA","KS"), ~ ga_get_views(brand = .x, ref_day = Sys.Date()-1, use_carshoe_raw = F))
+traffic <- map_df(c("P","M","MA","KS","C"), ~ ga_get_views(brand = .x, ref_day = Sys.Date()-1, use_carshoe_raw = F))
 
 
 # UPLOAD TO DATA LAKE -----------------------------------------------------

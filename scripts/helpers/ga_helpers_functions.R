@@ -26,6 +26,9 @@ ga_get_data <- function(start_date, end_date, brand, dimensions, metrics, segmen
         } else if (brand == "KS" & use_carshoe_raw == T){
                 view <- profiles %>% 
                         filter(id == "65787108")
+        } else if (brand == "C"){
+                view <- profiles %>% 
+                        filter(id == "95298383")
         } else {
                 view <- profiles %>% 
                         filter(id == "169292958")
@@ -188,7 +191,9 @@ ga_get_views <- function(brand, ref_day, split_daywise = F,use_carshoe_raw = F){
                 segment_id <- "gaid::OJMUdSU9RiK0BdphC3T0Zg"
         } else if(brand == "KS" & use_carshoe_raw == T){
                 segment_id <- "gaid::wpN-5UBESBuzUedlpmhLSg"
-        } else {
+        } else if(brand == "C"){
+                segment_id <- "gaid::YU9hT4k-QiWHCKPrxckB2g"
+        }else {
                 segment_id <- "gaid::r9VnChzwQduyWOb50bwN1w"
         }
         
@@ -208,7 +213,7 @@ ga_get_views <- function(brand, ref_day, split_daywise = F,use_carshoe_raw = F){
 
 ga_get_most_viewed <- function(ref_day, brand, paginate_query = F, use_miumiu_mirror = F, lookback_days = 6){
         
-        
+if(brand != "C")  {      
         most_viewed <- ga_get_data(start_date = ref_day-lookback_days,
                     end_date = ref_day,
                     brand = brand,
@@ -239,8 +244,38 @@ ga_get_most_viewed <- function(ref_day, brand, paginate_query = F, use_miumiu_mi
                 group_by(sku,country_code,brand,custom_grouping) %>% 
                 summarise(views = sum(totalEvents)) %>% 
                 ungroup()
+}else{
+        most_viewed <- ga_get_data(start_date = ref_day-lookback_days,
+                                   end_date = ref_day,
+                                   brand = brand,
+                                   dimensions = "ga:pagePathLevel2,ga:eventLabel,ga:medium,ga:source,ga:campaign",
+                                   metrics = "ga:totalEvents",
+                                   filters = "ga:eventCategory==ecommerce,ga:eventAction==detail;ga:pagePath!=^www\\.prada\\.com/(us|ca|cn|it|de|es|gr|fr|mc|be|gb|ie|dk|fi|se|no|at|ch|nl|lu|hk)/*",
+                                   split_daywise = F,
+                                   paginate_query = paginate_query,
+                                   use_miumiu_mirror = use_miumiu_mirror) %>% 
+                filter(pagePathLevel2 != "/miumiuca/") %>% 
+                mutate(brand = brand)
         
-        
+        most_viewed %>% 
+                mutate(country_code = str_sub(pagePathLevel2,-3) %>% str_sub(.,1,2) %>% toupper(),
+                       custom_grouping = case_when(source == "(direct)" & medium == "(none)" ~ "Direct",
+                                                   medium == "organic" ~ "Natural Search",
+                                                   medium == "referral" & campaign == "(not set)" & grepl(pattern = "(.*facebook.*)|(.*instagram.*)|(.*t\\.co$)|(.*pinterest.*)|(.*vk\\.com.*)|(.*twitter.*)|(.*youtube.*)|(^line$)", source) ~ "Referrals from socials",
+                                                   medium == "referral" & campaign == "(not set)" ~ "Referrals non-social",
+                                                   grepl("social[-_]post",medium) & campaign != "(not set)" ~ "Social Posts",
+                                                   medium == "sa" | medium == "social_ad" ~ "Social Paid Campaigns",
+                                                   grepl("email|mail",medium)  ~ "Email",
+                                                   grepl("cpc|mse",medium) ~ "Paid Search",
+                                                   grepl("display|affiliate|video|video_ad|branded_content|native",medium)  ~ "Display",
+                                                   grepl(" ^(cpv|cpa|cpp|content-text)$",medium) | campaign != "(not set)" ~ "Other Campaigns",
+                                                   TRUE ~ "(Other)")) %>% 
+                filter(grepl("^[A-Z0-9]{4,}",eventLabel)) %>% 
+                mutate(sku = gsub("-","_",eventLabel)) %>% 
+                group_by(sku,country_code,brand,custom_grouping) %>% 
+                summarise(views = sum(totalEvents)) %>% 
+                ungroup() 
+}
         
         
         
@@ -362,6 +397,8 @@ ga_get_campaign <- function(brand, ref_day, split_daywise = F,use_carshoe_raw = 
                 segment_id <- "gaid::OJMUdSU9RiK0BdphC3T0Zg"
         } else if(brand == "KS" & use_carshoe_raw == T){
                 segment_id <- "gaid::wpN-5UBESBuzUedlpmhLSg"
+        } else if(brand == "C" & use_carshoe_raw == T){
+                segment_id <- "gaid::YU9hT4k-QiWHCKPrxckB2g"
         } else {
                 segment_id <- "gaid::r9VnChzwQduyWOb50bwN1w"
         }
